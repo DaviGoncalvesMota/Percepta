@@ -1,0 +1,14 @@
+{
+    "feedbacks": [
+        {
+            "id": 1,
+            "name": "Product A",
+            "price": 100.0
+        },
+        {
+            "id": 2,
+            "name": "Product B",
+            "price": 150.0
+        }
+    ]
+}
