@@ -1,14 +1,36 @@
 {
-    "feedbacks": [
-        {
-            "id": 1,
-            "name": "Product A",
-            "price": 100.0
-        },
-        {
-            "id": 2,
-            "name": "Product B",
-            "price": 150.0
-        }
-    ]
+  "feedbacks": [
+    {
+      "id": "1",
+      "rating": 4,
+      "comment": "Great product!",
+      "positivePoint": "the quality is excellent",
+      "negativePoint": "the price is a bit high",
+      "category": "electronics",
+      "date": "2023-10-01T12:00:00Z",
+      "userName": "John Doe",
+      "userId": "101",
+      "enterprise": "TechCorp"
+    }
+  ],
+  "users": [
+    {
+      "id": "101",
+      "name": "John Doe",
+      "email": "johndoe@gmail.com",
+      "password": "hashed_password",
+      "phone": "123-456-7890",
+      "address": "123 Main St, Springfield, USA",
+      "role": "customer"
+    },
+    {
+      "id": "102",
+      "name": "TechCorp",
+      "email": "techcorp@gmail.com",
+      "password": "hashed_password",
+      "phone": "987-654-3210",
+      "address": "456 Tech Lane, Silicon Valley, USA",
+      "role": "enterprise"
+    }
+  ]
 }

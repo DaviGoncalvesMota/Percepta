@@ -1,4 +1,4 @@
-export interface SidebarProps {
+export interface ISidebarProps {
   open: boolean;
   handleDrawerClose: () => void;
 }

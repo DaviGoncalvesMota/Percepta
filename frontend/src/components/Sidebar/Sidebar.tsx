@@ -3,15 +3,16 @@ import SidebarLists from "./SidebarLists/SidebarLists";
 import { ChevronRight } from "@mui/icons-material";
 import { Outlet } from "react-router-dom";
 import { Drawer, DrawerHeader } from "../../styles/styles";
-import type { SidebarProps } from "../../interfaces/SidebarProps";
+import type { ISidebarProps } from "../../interfaces/ISidebarProps";
 import {
   Box,
   Divider,
   CssBaseline,
   IconButton,
+  Typography,
 } from "@mui/material";
 
-const Sidebar = ({open, handleDrawerClose}: SidebarProps) => {
+const Sidebar = ({open, handleDrawerClose}: ISidebarProps) => {
   const theme = useTheme();
 
   return (
@@ -19,6 +20,11 @@ const Sidebar = ({open, handleDrawerClose}: SidebarProps) => {
       <CssBaseline />
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
+          {open && (
+          <Typography sx={{marginRight: "20%"}} variant="h6" noWrap component="div">
+            Percepta
+          </Typography>
+          )}
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? <ChevronRight /> : <ChevronRight />}
           </IconButton>

@@ -39,14 +39,16 @@ const AppBar = ({ open, handleDrawerOpen }: AppBarProps) => {
           >
             <Menu />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Percepta
-          </Typography>
+          {!open && (
+            <Typography variant="h6" noWrap component="div">
+              Percepta
+            </Typography>
+          )}
           <Box
             sx={{ justifyContent: "flex-end", flexGrow: 1, display: "flex" }}
           >
             <IconButton color="inherit" onClick={handleTheme}>
-              {themeMode === "light" ? <Brightness5 /> : <DarkMode />}
+              {themeMode === "light" ? <DarkMode /> : <Brightness5 />}
             </IconButton>
           </Box>
         </Toolbar>
