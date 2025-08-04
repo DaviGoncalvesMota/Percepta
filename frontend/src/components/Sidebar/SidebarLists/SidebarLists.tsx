@@ -1,18 +1,20 @@
 import { Feedback, Forum, Info, Dashboard, AccountCircle, SmartToy } from "@mui/icons-material";
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 const Lists = () => {
     
   const [ open ] = useState(true);
+  const userId = useParams().id;
 
   const items = [
-    { text: "All Feedbacks", icon: <Forum />, path: "/allfeedbacks/:id" },
-    { text: "About", icon: <Info />, path: "/about/:id" },
-    { text: "Send a Feedback", icon: <Feedback />, path: "/feedback/:id" },
-    { text: "Dashboard", icon: <Dashboard />, path: "/dashboard/:id" },     
-    { text: "IA", icon: <SmartToy />, path: "/ia/:id" },
-    { text: "Profile", icon: <AccountCircle />, path: "/profile/:id" },
+    { text: "Feed ", icon: <Forum />, path: "/allfeedbacks/" + userId },
+    { text: "Sobre", icon: <Info />, path: "/about/" + userId },
+    { text: "Envie seu Feedback", icon: <Feedback />, path: "/feedback/" + userId },
+    { text: "Dashboard", icon: <Dashboard />, path: "/dashboard/" + userId },     
+    { text: "Assistente de IA", icon: <SmartToy />, path: "/ia/" + userId },
+    { text: "Perfil", icon: <AccountCircle />, path: "/profile/" + userId },
   ]
 
   return (

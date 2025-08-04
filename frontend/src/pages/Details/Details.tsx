@@ -7,6 +7,7 @@ import {
   Box,
   Rating,
   Stack,
+  Divider,
 } from "@mui/material";
 import { Category, CalendarToday } from "@mui/icons-material";
 import axios from "axios";
@@ -26,115 +27,97 @@ const Details = () => {
       .then((res) => {
         setFeedback(res.data);
       })
-      .catch((err) => console.error("Error fetching feedback details:", err));
+      .catch((err) => console.error("Erro ao carregar detalhes:", err));
   }, [id]);
 
   if (!feedback) {
     return (
       <Box sx={{ padding: 2 }}>
         <Typography variant="h4" align="center">
-          Loading feedback details...
+          Carregando os detalhes do feedback...
         </Typography>
       </Box>
     );
   }
 
   return (
-    <>
-      <Box sx={{ padding: 2, maxWidth: 400, margin: "auto" }}>
-        {feedback && (
-          <CardComponent
-            sx={{
-              maxWidth: 400,
-              maxHeight: "100%",
-              borderRadius: 3,
-              boxShadow: 3,
-              p: 2,
-              bgcolor: "background.paper",
-            }}
-          >
-            <CardContent
-              sx={{
-                justifyContent: "center",
-                alignItems: "center",
-                display: "flex",
-              }}
+    <Box sx={{ padding: 2, maxWidth: 600, margin: "auto" }}>
+      <CardComponent
+        sx={{
+          borderRadius: 4,
+          boxShadow: 4,
+          bgcolor: "background.paper",
+          p: 3,
+        }}
+      >
+        <CardContent>
+          <Stack spacing={2}>
+            <Typography
+              align="center"
+              variant="h5"
+              fontWeight="bold"
+              gutterBottom
             >
-              <Stack spacing={1}>
-                <Typography
-                  align="center"
-                  variant="subtitle2"
-                  color="text.secondary"
-                >
-                  Review: <strong>{feedback.revieweeName}</strong>
-                </Typography>
+              Avaliação para: {feedback.revieweeName}
+            </Typography>
 
-                <Typography align="center" variant="h6" fontWeight="bold">
-                  By: {feedback.reviewerName}
-                </Typography>
+            <Typography align="center" variant="subtitle1" color="text.secondary">
+              Por: {feedback.reviewerName}
+            </Typography>
 
-                <Box
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  gap={1}
-                >
-                  <Rating
-                    value={feedback.rating}
-                    precision={0.5}
-                    readOnly
-                    size="small"
-                  />
-                  <Typography variant="body2" color="text.secondary">
-                    {feedback.rating} stars
-                  </Typography>
-                </Box>
+            <Box display="flex" justifyContent="center" alignItems="center" gap={1}>
+              <Rating value={feedback.rating} precision={0.5} readOnly />
+              <Typography variant="body2" color="text.secondary">
+                {feedback.rating} Estrelas
+              </Typography>
+            </Box>
 
-                <Typography align="center" variant="body1">
-                  "{feedback.comment}"
-                </Typography>
+            <Divider />
 
-                <br />
+            <Typography align="center" variant="body1" fontStyle="italic">
+              "{feedback.comment}"
+            </Typography>
 
-                <Typography variant="body1" align="center">
-                  <strong>Positive Point:</strong>
-                  <br />
-                  {feedback.positivePoint}
-                </Typography>
+            <Divider />
 
-                <br />
+            <Box>
+              <Typography variant="subtitle2" color="success.main">
+                <strong>Ponto Positivo:</strong>
+              </Typography>
+              <Typography variant="body2">{feedback.positivePoint}</Typography>
+            </Box>
 
-                <Typography align="center" variant="body1">
-                  <strong>Negative Point:</strong>
-                  <br />
-                  {feedback.negativePoint}
-                </Typography>
+            <Box>
+              <Typography variant="subtitle2" color="error.main">
+                <strong>Ponto Negativo:</strong>
+              </Typography>
+              <Typography variant="body2">{feedback.negativePoint}</Typography>
+            </Box>
 
-                <br />
+            <Divider />
 
-                <Box display="flex" alignItems="center" gap={1} mt={2}>
-                  <CalendarToday sx={{ fontSize: 16 }} />
-                  <Typography variant="caption">{feedback.date}</Typography>
-                </Box>
+            <Box display="flex" justifyContent="space-between" flexWrap="wrap">
+              <Box display="flex" alignItems="center" gap={1}>
+                <CalendarToday sx={{ fontSize: 16 }} />
+                <Typography variant="caption">{new Date(feedback.date).toLocaleDateString()}</Typography>
+              </Box>
+              <Box display="flex" alignItems="center" gap={1}>
+                <Category sx={{ fontSize: 16 }} />
+                <Typography variant="caption">Categoria: {feedback.category}</Typography>
+              </Box>
+            </Box>
+          </Stack>
+        </CardContent>
 
-                <Box display="flex" alignItems="center" gap={1}>
-                  <Category sx={{ fontSize: 16 }} />
-                  <Typography variant="caption">
-                    Category : {feedback.category}
-                  </Typography>
-                </Box>
-              </Stack>
-            </CardContent>
-
-            <CardActions sx={{ justifyContent: "center" }}>
-              <Link to={`/allfeedbacks/${userId}`} style={{ textDecoration: "none" }}>
-                <Button size="small"> Voltar </Button>
-              </Link>
-            </CardActions>
-          </CardComponent>
-        )}
-      </Box>
-    </>
+        <CardActions sx={{ justifyContent: "center", marginTop: 2 }}>
+          <Link to={`/allfeedbacks/${userId}`} style={{ textDecoration: "none" }}>
+            <Button variant="contained" color="primary">
+              Voltar
+            </Button>
+          </Link>
+        </CardActions>
+      </CardComponent>
+    </Box>
   );
 };
 

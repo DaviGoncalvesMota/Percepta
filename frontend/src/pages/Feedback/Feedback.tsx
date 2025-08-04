@@ -1,14 +1,26 @@
-import { Box, Button, MenuItem, Rating, Stack, TextField, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import axios from "axios";
+import { baseURL } from "../../baseURL";
+import { useState } from "react";
+import Forms from "../../components/Forms/Forms";
 
 const Feedback = () => {
+  const [enterprises, setEterprises] = useState([]);
 
   const categories = [
     "Atendimento",
     "Produto",
     "Serviço",
     "Suporte Técnico",
-    "Outros"
+    "Outros",
   ];
+
+  axios
+    .get(baseURL + "/enterprises")
+    .then((res) => {
+      setEterprises(res.data);
+    })
+    .catch((err) => console.error("Error fetching users:", err));
 
   return (
     <Box
@@ -31,64 +43,9 @@ const Feedback = () => {
 
       <br />
 
-      <form>
-        <Stack spacing={2}>
-          <TextField
-            label="Nome da Empresa"
-            name="enterprise"
-            required
-            fullWidth
-          />
-
-          <Box>
-            <Typography component="legend">Nota</Typography>
-            <Rating
-              name="rating"
-              precision={0.5}
-              size="large"
-            />
-          </Box>
-
-          <TextField
-            label="Ponto Positivo"
-            name="positivePoint"
-            fullWidth
-          />
-
-          <TextField
-            label="Ponto Negativo"
-            name="negativePoint"
-            fullWidth
-          />
-
-          <TextField
-            label="Categoria"
-            name="category"
-            select
-            fullWidth
-          >
-            {categories.map((option , i) => (
-              <MenuItem key={i} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </TextField>
-
-          <TextField
-            label="Comentário"
-            name="comment"
-            multiline
-            rows={4}
-            fullWidth
-          />
-
-          <Button variant="contained" color="primary" type="submit">
-            Enviar Feedback
-          </Button>
-        </Stack>
-      </form>
+      <Forms enterprises={enterprises} categories={categories} />
     </Box>
   );
-}
+};
 
 export default Feedback;

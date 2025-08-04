@@ -46,15 +46,14 @@
       "revieweeName": "TechCorp"
     }
   ],
-  "users": [
+  "employers": [
     {
       "id": "201",
       "name": "Maria Silva",
       "email": "maria@gmail.com",
-      "password": "hashed_password",
+      "password": "1234",
       "phone": "11988887777",
-      "address": "Rua das Flores, 123, São Paulo, SP",
-      "role": "funcionario"
+      "address": "Rua das Flores, 123, São Paulo, SP"
     },
     {
       "id": "202",
@@ -62,8 +61,7 @@
       "email": "carlos@gmail.com",
       "password": "hashed_password",
       "phone": "11999998888",
-      "address": "Av. Brasil, 321, Mauá, SP",
-      "role": "funcionario"
+      "address": "Av. Brasil, 321, Mauá, SP"
     },
     {
       "id": "203",
@@ -71,26 +69,33 @@
       "email": "fernanda@gmail.com",
       "password": "hashed_password",
       "phone": "1188776655",
-      "address": "Rua Central, 50, Campinas, SP",
-      "role": "funcionario"
-    },
+      "address": "Rua Central, 50, Campinas, SP"
+    }
+  ],
+  "enterprises": [
     {
       "id": "102",
       "name": "TechCorp",
       "email": "techcorp@gmail.com",
-      "password": "hashed_password",
+      "password": "4321",
       "phone": "1133334444",
       "address": "Av. Tecnologia, 456, São Paulo, SP",
-      "role": "empresa"
+      "cnpj": "12.345.678/0001-90",
+      "yearFoundation": 2010,
+      "employersNumber": 120,
+      "objective": "Inovar o mercado tecnológico com soluções eficientes e humanas."
     },
     {
       "id": "103",
       "name": "InovaSoft",
       "email": "inovasoft@gmail.com",
-      "password": "hashed_password",
+      "password": "1234",
       "phone": "1144445555",
       "address": "Rua das Inovações, 78, São Paulo, SP",
-      "role": "empresa"
+      "cnpj": "98.765.432/0001-10",
+      "yearFoundation": 2015,
+      "employersNumber": 80,
+      "objective": "Transformar ideias em softwares inteligentes e acessíveis."
     }
   ]
 }

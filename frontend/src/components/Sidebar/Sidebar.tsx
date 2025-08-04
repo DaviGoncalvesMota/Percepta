@@ -15,6 +15,7 @@ import {
 const Sidebar = ({open, handleDrawerClose}: ISidebar) => {
   const theme = useTheme();
 
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />

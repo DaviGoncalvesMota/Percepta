@@ -1,4 +1,4 @@
-export interface IUsers {
+export interface IEmployers {
     id: string;
     name: string;
     email: string;

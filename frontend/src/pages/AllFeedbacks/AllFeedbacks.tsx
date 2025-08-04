@@ -9,8 +9,7 @@ import { useParams } from "react-router-dom";
 const AllFeedbacks = () => {
   const [feedbacks, setFeedbacks] = useState<ICard[]>([]);
 
-  const userIdByParams = useParams().userId;
-
+  const userIdByParams = useParams().id;
 
   useEffect(() => {
     const fetchFeedbacks = async () => {
@@ -34,39 +33,41 @@ const AllFeedbacks = () => {
       <Box sx={{ padding: 2 }}>
         <Typography variant="h4" align="center">
           {" "}
-          All Feedbacks{" "}
+          Todos os Feedbacks{" "}
         </Typography>
         <Typography variant="body1" align="center" sx={{ marginBottom: 2 }}>
-          Here you can view all the feedbacks submitted.
+          Aqui estão todos os feedbacks das empresas.
         </Typography>
 
-        {feedbacks.length > 0 ? (
-          feedbacks.map((feedback: ICard, index) => {
-            return (
-              <Card
-                id={feedback.id}
-                category={feedback.category}
-                rating={feedback.rating}
-                comment={feedback.comment}
-                date={feedback.date}
-                reviewerName={feedback.reviewerName}
-                revieweeName={feedback.revieweeName}
-                userIdByParams={userIdByParams}
-                reviewerId={feedback.reviewerId}
-                positivePoint={feedback.positivePoint}
-                negativePoint={feedback.negativePoint}
-                revieweeId={feedback.revieweeId}
-                reviewerRole={feedback.reviewerRole}
-                revieweeRole={feedback.revieweeRole}
-                key={index}
-              />
-            );
-          })
-        ) : (
-          <Typography variant="body2" color="text.secondary" align="center">
-            No feedbacks available at the moment.
-          </Typography>
-        )}
+        <Box sx={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "center" }}>
+          {feedbacks.length > 0 ? (
+            feedbacks.filter((e) => e.category == "empresa").map((feedback: ICard, index) => {
+              return (
+                <Card
+                  id={feedback.id}
+                  category={feedback.category}
+                  rating={feedback.rating}
+                  comment={feedback.comment}
+                  date={feedback.date}
+                  reviewerName={feedback.reviewerName}
+                  revieweeName={feedback.revieweeName}
+                  userIdByParams={userIdByParams}
+                  reviewerId={feedback.reviewerId}
+                  positivePoint={feedback.positivePoint}
+                  negativePoint={feedback.negativePoint}
+                  revieweeId={feedback.revieweeId}
+                  reviewerRole={feedback.reviewerRole}
+                  revieweeRole={feedback.revieweeRole}
+                  key={index}
+                />
+              );
+            })
+          ) : (
+            <Typography variant="body2" color="text.secondary" align="center">
+              Sem feedbacks disponíveis no momento.
+            </Typography>
+          )}
+        </Box>
       </Box>
     </>
   );

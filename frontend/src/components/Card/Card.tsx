@@ -36,22 +36,22 @@ const Card = ({
       <CardContent>
         <Stack spacing={1}>
           <Typography variant="subtitle2" color="text.secondary">
-            Review: <strong>{revieweeName}</strong>
+            Por: <strong>{reviewerName}</strong>
           </Typography>
 
           <Typography variant="h6" fontWeight="bold">
-            By: {reviewerName}
+            <strong>{revieweeName}</strong>
           </Typography>
 
           <Box display="flex" alignItems="center" gap={1}>
             <Rating value={rating} precision={0.5} readOnly size="small" />
             <Typography variant="body2" color="text.secondary">
-              {rating} stars
+              {rating} Estrelas
             </Typography>
           </Box>
 
           <Typography variant="body1" sx={{ mt: 1.5 }}>
-            "{comment}"
+            "{comment.slice(0, 40)}{comment.length > 40 ? "..." : ""}"
           </Typography>
 
           <Box display="flex" alignItems="center" gap={1} mt={2}>
@@ -61,17 +61,18 @@ const Card = ({
 
           <Box display="flex" alignItems="center" gap={1}>
             <Category sx={{ fontSize: 16 }} />
-            <Typography variant="caption">Category: {category}</Typography>
+            <Typography variant="caption">Categoria: {category}</Typography>
           </Box>
         </Stack>
       </CardContent>
 
+      
       <CardActions>
         <Link
           to={`/details/${id}/${userIdByParams}`}
           style={{ textDecoration: "none" }}
         >
-          <Button size="small"> Details </Button>
+          <Button size="small"> Detalhes </Button>
         </Link>
       </CardActions>
     </CardComponent>
