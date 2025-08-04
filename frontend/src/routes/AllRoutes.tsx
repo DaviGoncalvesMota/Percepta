@@ -19,13 +19,13 @@ const AllRoutes = () => {
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<Home />} />
-          <Route path="/allfeedbacks" element={<AllFeedbacks />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/feedback" element={<Feedback />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/details" element={<Details />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/ia" element={<IA />} />
+          <Route path="/allfeedbacks/:id" element={<AllFeedbacks />} />
+          <Route path="/about/:id" element={<About />} />
+          <Route path="/feedback/:id" element={<Feedback />} />
+          <Route path="/dashboard/:id" element={<Dashboard />} />
+          <Route path="/details/:id/:userId" element={<Details />} />
+          <Route path="/profile/:id" element={<Profile />} />
+          <Route path="/ia/:id" element={<IA />} />
           <Route path="*" element={<NotFound />} />
         </Route>
         <Route path="/login" element={<Login />} />

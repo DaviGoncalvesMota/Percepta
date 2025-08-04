@@ -1,36 +1,96 @@
 {
   "feedbacks": [
     {
-      "id": "1",
+      "id": "f1",
       "rating": 4,
-      "comment": "Great product!",
-      "positivePoint": "the quality is excellent",
-      "negativePoint": "the price is a bit high",
-      "category": "electronics",
-      "date": "2023-10-01T12:00:00Z",
-      "userName": "John Doe",
-      "userId": "101",
-      "enterprise": "TechCorp"
+      "comment": "Ambiente agradável e boa liderança.",
+      "positivePoint": "A equipe é colaborativa",
+      "negativePoint": "Precisa melhorar os benefícios",
+      "category": "empresa",
+      "date": "2025-07-31T15:00:00Z",
+      "reviewerId": "201",
+      "revieweeId": "102",
+      "reviewerRole": "funcionario",
+      "revieweeRole": "empresa",
+      "reviewerName": "Maria Silva",
+      "revieweeName": "TechCorp"
+    },
+    {
+      "id": "f2",
+      "rating": 5,
+      "comment": "Funcionário comprometido e proativo.",
+      "positivePoint": "Pontualidade e foco nas metas",
+      "negativePoint": "Precisa desenvolver habilidades de liderança",
+      "category": "funcionario",
+      "date": "2025-07-31T16:00:00Z",
+      "reviewerId": "102",
+      "revieweeId": "201",
+      "reviewerRole": "empresa",
+      "revieweeRole": "funcionario",
+      "reviewerName": "TechCorp",
+      "revieweeName": "Maria Silva"
+    },
+    {
+      "id": "f3",
+      "rating": 3,
+      "comment": "A empresa tem potencial, mas falta organização.",
+      "positivePoint": "Projetos interessantes",
+      "negativePoint": "Gestão confusa",
+      "category": "empresa",
+      "date": "2025-08-01T12:00:00Z",
+      "reviewerId": "203",
+      "revieweeId": "102",
+      "reviewerRole": "funcionario",
+      "revieweeRole": "empresa",
+      "reviewerName": "Fernanda Lima",
+      "revieweeName": "TechCorp"
     }
   ],
   "users": [
     {
-      "id": "101",
-      "name": "John Doe",
-      "email": "johndoe@gmail.com",
+      "id": "201",
+      "name": "Maria Silva",
+      "email": "maria@gmail.com",
       "password": "hashed_password",
-      "phone": "123-456-7890",
-      "address": "123 Main St, Springfield, USA",
-      "role": "customer"
+      "phone": "11988887777",
+      "address": "Rua das Flores, 123, São Paulo, SP",
+      "role": "funcionario"
+    },
+    {
+      "id": "202",
+      "name": "Carlos Souza",
+      "email": "carlos@gmail.com",
+      "password": "hashed_password",
+      "phone": "11999998888",
+      "address": "Av. Brasil, 321, Mauá, SP",
+      "role": "funcionario"
+    },
+    {
+      "id": "203",
+      "name": "Fernanda Lima",
+      "email": "fernanda@gmail.com",
+      "password": "hashed_password",
+      "phone": "1188776655",
+      "address": "Rua Central, 50, Campinas, SP",
+      "role": "funcionario"
     },
     {
       "id": "102",
       "name": "TechCorp",
       "email": "techcorp@gmail.com",
       "password": "hashed_password",
-      "phone": "987-654-3210",
-      "address": "456 Tech Lane, Silicon Valley, USA",
-      "role": "enterprise"
+      "phone": "1133334444",
+      "address": "Av. Tecnologia, 456, São Paulo, SP",
+      "role": "empresa"
+    },
+    {
+      "id": "103",
+      "name": "InovaSoft",
+      "email": "inovasoft@gmail.com",
+      "password": "hashed_password",
+      "phone": "1144445555",
+      "address": "Rua das Inovações, 78, São Paulo, SP",
+      "role": "empresa"
     }
   ]
 }

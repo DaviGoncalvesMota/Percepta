@@ -1,7 +1,7 @@
 import { Toolbar, IconButton, Typography, Box } from "@mui/material";
 import { AppBar as AppBarComponent } from "../../styles/styles";
 import { Brightness5, DarkMode, Menu } from "@mui/icons-material";
-import { darkTheme, lightTheme } from "../../context/Theme/Theme";
+import { darkTheme, lightTheme } from "../../styles/Theme";
 import { useContext } from "react";
 import { ThemeContext } from "../../context/Theme/ThemeContext";
 

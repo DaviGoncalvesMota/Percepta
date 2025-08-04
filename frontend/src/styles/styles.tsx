@@ -1,6 +1,6 @@
 import { styled } from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
-import type { IAppBarProps } from "../interfaces/IAppbarProps";
+import type { IAppBar } from "../interfaces/IAppbar";
 import MuiDrawer from "@mui/material/Drawer";
 import { openedMixin, closedMixin } from "../components/Sidebar/Mixins/SidebarMixins";
 
@@ -17,7 +17,7 @@ export const DrawerHeader = styled("div")(({ theme }) => ({
 
 export const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
-})<IAppBarProps>(({ theme }) => ({
+})<IAppBar>(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,

@@ -3,7 +3,7 @@ import SidebarLists from "./SidebarLists/SidebarLists";
 import { ChevronRight } from "@mui/icons-material";
 import { Outlet } from "react-router-dom";
 import { Drawer, DrawerHeader } from "../../styles/styles";
-import type { ISidebarProps } from "../../interfaces/ISidebarProps";
+import type { ISidebar } from "../../interfaces/ISidebar";
 import {
   Box,
   Divider,
@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 
-const Sidebar = ({open, handleDrawerClose}: ISidebarProps) => {
+const Sidebar = ({open, handleDrawerClose}: ISidebar) => {
   const theme = useTheme();
 
   return (

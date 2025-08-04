@@ -1,7 +1,7 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { ThemeContext } from "./context/Theme/ThemeContext";
-import { darkTheme, lightTheme } from "./context/Theme/Theme";
+import { darkTheme, lightTheme } from "./styles/Theme";
 import { useContext } from "react";
 import AppBar from "./components/Appbar/Appbar";
 import { OpenContext } from "./context/Open/OpenContext";

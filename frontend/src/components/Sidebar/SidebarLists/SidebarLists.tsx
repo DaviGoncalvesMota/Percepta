@@ -7,12 +7,12 @@ const Lists = () => {
   const [ open ] = useState(true);
 
   const items = [
-    { text: "All Feedbacks", icon: <Forum />, path: "/allfeedbacks" },
-    { text: "About", icon: <Info />, path: "/about" },
-    { text: "Send a Feedback", icon: <Feedback />, path: "/feedback" },
-    { text: "Dashboard", icon: <Dashboard />, path: "/dashboard" },     
-    { text: "IA", icon: <SmartToy />, path: "/ia" },
-    { text: "Profile", icon: <AccountCircle />, path: "/profile" },
+    { text: "All Feedbacks", icon: <Forum />, path: "/allfeedbacks/:id" },
+    { text: "About", icon: <Info />, path: "/about/:id" },
+    { text: "Send a Feedback", icon: <Feedback />, path: "/feedback/:id" },
+    { text: "Dashboard", icon: <Dashboard />, path: "/dashboard/:id" },     
+    { text: "IA", icon: <SmartToy />, path: "/ia/:id" },
+    { text: "Profile", icon: <AccountCircle />, path: "/profile/:id" },
   ]
 
   return (

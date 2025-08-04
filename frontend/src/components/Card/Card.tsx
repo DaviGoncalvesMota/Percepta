@@ -9,22 +9,26 @@ import {
   Stack,
 } from "@mui/material";
 import { Category, CalendarToday } from "@mui/icons-material";
-import type { CardProps } from "../../interfaces/ICardProps";
+import type { ICard } from "../../interfaces/ICard";
+import { Link } from "react-router-dom";
 
 const Card = ({
+  id,
   rating,
   category,
   comment,
   date,
-  userName,
-  enterprise,
-}: CardProps) => {
+  reviewerName,
+  revieweeName,
+  userIdByParams,
+}: ICard) => {
+  
   return (
     <CardComponent
       sx={{
         maxWidth: 400,
         borderRadius: 3,
-        boxShadow: 3,   
+        boxShadow: 3,
         p: 2,
         bgcolor: "background.paper",
       }}
@@ -32,11 +36,11 @@ const Card = ({
       <CardContent>
         <Stack spacing={1}>
           <Typography variant="subtitle2" color="text.secondary">
-            Enterprise: <strong>{enterprise}</strong>
+            Review: <strong>{revieweeName}</strong>
           </Typography>
 
           <Typography variant="h6" fontWeight="bold">
-            {userName}
+            By: {reviewerName}
           </Typography>
 
           <Box display="flex" alignItems="center" gap={1}>
@@ -47,7 +51,7 @@ const Card = ({
           </Box>
 
           <Typography variant="body1" sx={{ mt: 1.5 }}>
-            "{comment}" 
+            "{comment}"
           </Typography>
 
           <Box display="flex" alignItems="center" gap={1} mt={2}>
@@ -57,13 +61,18 @@ const Card = ({
 
           <Box display="flex" alignItems="center" gap={1}>
             <Category sx={{ fontSize: 16 }} />
-            <Typography variant="caption">Category : {category}</Typography>
+            <Typography variant="caption">Category: {category}</Typography>
           </Box>
         </Stack>
       </CardContent>
 
       <CardActions>
-        <Button size="small"> Details </Button>
+        <Link
+          to={`/details/${id}/${userIdByParams}`}
+          style={{ textDecoration: "none" }}
+        >
+          <Button size="small"> Details </Button>
+        </Link>
       </CardActions>
     </CardComponent>
   );

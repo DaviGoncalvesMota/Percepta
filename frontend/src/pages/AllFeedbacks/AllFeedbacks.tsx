@@ -3,18 +3,30 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { baseURL } from "../../baseURL";
 import Card from "../../components/Card/Card";
-import type { ICardProps } from "../../interfaces/ICardProps";
+import type { ICard } from "../../interfaces/ICard";
+import { useParams } from "react-router-dom";
 
 const AllFeedbacks = () => {
-  const [feedbacks, setFeedbacks] = useState<ICardProps[]>([]);
+  const [feedbacks, setFeedbacks] = useState<ICard[]>([]);
+
+  const userIdByParams = useParams().userId;
+
 
   useEffect(() => {
-    axios
-      .get(baseURL + "/feedbacks")
-      .then((res) => {
-        setFeedbacks(res.data);
-      })
-      .catch((err) => console.error("Error fetching feedbacks:", err));
+    const fetchFeedbacks = async () => {
+      try {
+        axios
+          .get(baseURL + "/feedbacks")
+          .then((res) => {
+            setFeedbacks(res.data);
+          })
+          .catch((err) => console.error("Error fetching feedbacks:", err));
+      } catch (error) {
+        console.error("Error fetching feedbacks:", error);
+      }
+    };
+
+    fetchFeedbacks();
   }, []);
 
   return (
@@ -27,19 +39,29 @@ const AllFeedbacks = () => {
         <Typography variant="body1" align="center" sx={{ marginBottom: 2 }}>
           Here you can view all the feedbacks submitted.
         </Typography>
-        {/* Placeholder for feedbacks list */}
+
         {feedbacks.length > 0 ? (
-          feedbacks.map((feedback: CardProps, index) => (
-            <Card
-              category={feedback.category}
-              rating={feedback.rating}
-              comment={feedback.comment}
-              date={feedback.date}
-              userName={feedback.userName}
-              enterprise={feedback.enterprise}
-              key={index}
-            />
-          ))
+          feedbacks.map((feedback: ICard, index) => {
+            return (
+              <Card
+                id={feedback.id}
+                category={feedback.category}
+                rating={feedback.rating}
+                comment={feedback.comment}
+                date={feedback.date}
+                reviewerName={feedback.reviewerName}
+                revieweeName={feedback.revieweeName}
+                userIdByParams={userIdByParams}
+                reviewerId={feedback.reviewerId}
+                positivePoint={feedback.positivePoint}
+                negativePoint={feedback.negativePoint}
+                revieweeId={feedback.revieweeId}
+                reviewerRole={feedback.reviewerRole}
+                revieweeRole={feedback.revieweeRole}
+                key={index}
+              />
+            );
+          })
         ) : (
           <Typography variant="body2" color="text.secondary" align="center">
             No feedbacks available at the moment.
