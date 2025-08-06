@@ -13,11 +13,16 @@ import { Category, CalendarToday } from "@mui/icons-material";
 import axios from "axios";
 import { baseURL } from "../../baseURL";
 import { useEffect, useState } from "react";
-import type { ICard } from "../../interfaces/ICard";
+import type { IFeedbackCard } from "../../interfaces/ICard";
 import { Link, useParams } from "react-router-dom";
 
 const Details = () => {
-  const [feedback, setFeedback] = useState<ICard | null>(null);
+  const isAuthenticated = localStorage.getItem("user");
+  if (!isAuthenticated) {
+    window.location.href = "/login";
+  }
+
+  const [feedback, setFeedback] = useState<IFeedbackCard | null>(null);
   const id = useParams().id;
   const userId = useParams().userId;
 
@@ -61,11 +66,20 @@ const Details = () => {
               Avaliação para: {feedback.revieweeName}
             </Typography>
 
-            <Typography align="center" variant="subtitle1" color="text.secondary">
+            <Typography
+              align="center"
+              variant="subtitle1"
+              color="text.secondary"
+            >
               Por: {feedback.reviewerName}
             </Typography>
 
-            <Box display="flex" justifyContent="center" alignItems="center" gap={1}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              gap={1}
+            >
               <Rating value={feedback.rating} precision={0.5} readOnly />
               <Typography variant="body2" color="text.secondary">
                 {feedback.rating} Estrelas
@@ -99,18 +113,25 @@ const Details = () => {
             <Box display="flex" justifyContent="space-between" flexWrap="wrap">
               <Box display="flex" alignItems="center" gap={1}>
                 <CalendarToday sx={{ fontSize: 16 }} />
-                <Typography variant="caption">{new Date(feedback.date).toLocaleDateString()}</Typography>
+                <Typography variant="caption">
+                  {new Date(feedback.date).toLocaleDateString()}
+                </Typography>
               </Box>
               <Box display="flex" alignItems="center" gap={1}>
                 <Category sx={{ fontSize: 16 }} />
-                <Typography variant="caption">Categoria: {feedback.category}</Typography>
+                <Typography variant="caption">
+                  Categoria: {feedback.category}
+                </Typography>
               </Box>
             </Box>
           </Stack>
         </CardContent>
 
         <CardActions sx={{ justifyContent: "center", marginTop: 2 }}>
-          <Link to={`/allfeedbacks/${userId}`} style={{ textDecoration: "none" }}>
+          <Link
+            to={`/allfeedbacks/${userId}`}
+            style={{ textDecoration: "none" }}
+          >
             <Button variant="contained" color="primary">
               Voltar
             </Button>

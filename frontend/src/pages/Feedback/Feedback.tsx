@@ -1,11 +1,16 @@
 import { Box, Typography } from "@mui/material";
-import axios from "axios";
-import { baseURL } from "../../baseURL";
-import { useState } from "react";
 import Forms from "../../components/Forms/Forms";
+import { useParams } from "react-router-dom";
 
 const Feedback = () => {
-  const [enterprises, setEterprises] = useState([]);
+
+  const isAuthenticated = localStorage.getItem("user");
+  if (!isAuthenticated) {
+    window.location.href = "/login";
+  }
+
+  const userId = useParams().id
+
 
   const categories = [
     "Atendimento",
@@ -14,13 +19,6 @@ const Feedback = () => {
     "Suporte Técnico",
     "Outros",
   ];
-
-  axios
-    .get(baseURL + "/enterprises")
-    .then((res) => {
-      setEterprises(res.data);
-    })
-    .catch((err) => console.error("Error fetching users:", err));
 
   return (
     <Box
@@ -41,9 +39,7 @@ const Feedback = () => {
         Sua opinião é muito importante!
       </Typography>
 
-      <br />
-
-      <Forms enterprises={enterprises} categories={categories} />
+      <Forms categories={categories} userId={userId}/>
     </Box>
   );
 };

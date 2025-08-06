@@ -6,12 +6,12 @@
       "comment": "Ambiente agradável e boa liderança.",
       "positivePoint": "A equipe é colaborativa",
       "negativePoint": "Precisa melhorar os benefícios",
-      "category": "empresa",
+      "category": "Atendimento",
       "date": "2025-07-31T15:00:00Z",
       "reviewerId": "201",
       "revieweeId": "102",
-      "reviewerRole": "funcionario",
-      "revieweeRole": "empresa",
+      "reviewerRole": "employer",
+      "revieweeRole": "company",
       "reviewerName": "Maria Silva",
       "revieweeName": "TechCorp"
     },
@@ -21,12 +21,12 @@
       "comment": "Funcionário comprometido e proativo.",
       "positivePoint": "Pontualidade e foco nas metas",
       "negativePoint": "Precisa desenvolver habilidades de liderança",
-      "category": "funcionario",
+      "category": "Serviço",
       "date": "2025-07-31T16:00:00Z",
       "reviewerId": "102",
       "revieweeId": "201",
-      "reviewerRole": "empresa",
-      "revieweeRole": "funcionario",
+      "reviewerRole": "company",
+      "revieweeRole": "employer",
       "reviewerName": "TechCorp",
       "revieweeName": "Maria Silva"
     },
@@ -36,14 +36,29 @@
       "comment": "A empresa tem potencial, mas falta organização.",
       "positivePoint": "Projetos interessantes",
       "negativePoint": "Gestão confusa",
-      "category": "empresa",
+      "category": "Serviço",
       "date": "2025-08-01T12:00:00Z",
       "reviewerId": "203",
       "revieweeId": "102",
-      "reviewerRole": "funcionario",
-      "revieweeRole": "empresa",
+      "reviewerRole": "employer",
+      "revieweeRole": "company",
       "reviewerName": "Fernanda Lima",
       "revieweeName": "TechCorp"
+    },
+    {
+      "id": "02e1",
+      "rating": 5,
+      "positivePoint": "teste ponto positivo",
+      "negativePoint": "ponto negativo teste",
+      "category": "Produto",
+      "comment": "muitoo bomm o produtoooo recomendooo demais a empresa inovasoft",
+      "date": "2025-08-06T18:47:52.012Z",
+      "reviewerId": "201",
+      "revieweeId": "103",
+      "reviewerName": "Maria Silva",
+      "revieweeName": "InovaSoft",
+      "reviewerRole": "employer",
+      "revieweeRole": "company"
     }
   ],
   "employers": [
@@ -53,7 +68,8 @@
       "email": "maria@gmail.com",
       "password": "1234",
       "phone": "11988887777",
-      "address": "Rua das Flores, 123, São Paulo, SP"
+      "address": "Rua das Flores, 123, São Paulo, SP",
+      "avatar": "https://m.media-amazon.com/images/M/MV5BMTE3YjhhMTQtYmUyYy00MWU5LTg4N2YtMTkxMDI0Y2FhMzg3XkEyXkFqcGc@._V1_QL75_UX500_CR0,0,500,281_.jpg"
     },
     {
       "id": "202",
@@ -61,7 +77,8 @@
       "email": "carlos@gmail.com",
       "password": "hashed_password",
       "phone": "11999998888",
-      "address": "Av. Brasil, 321, Mauá, SP"
+      "address": "Av. Brasil, 321, Mauá, SP",
+      "avatar": "https://preview.redd.it/leon-kennedy-is-absurdly-attractive-in-resident-evil-4-v0-24o386br63ta1.jpg?width=640&crop=smart&auto=webp&s=29215993db324eec1a0c3153e6d442a2eca2d463"
     },
     {
       "id": "203",
@@ -69,10 +86,11 @@
       "email": "fernanda@gmail.com",
       "password": "hashed_password",
       "phone": "1188776655",
-      "address": "Rua Central, 50, Campinas, SP"
+      "address": "Rua Central, 50, Campinas, SP",
+      "avatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTupBOijhzmFUrFqAxKj67wt_cmcVELplmu4w&s"
     }
   ],
-  "enterprises": [
+  "companies": [
     {
       "id": "102",
       "name": "TechCorp",
@@ -83,7 +101,8 @@
       "cnpj": "12.345.678/0001-90",
       "yearFoundation": 2010,
       "employersNumber": 120,
-      "objective": "Inovar o mercado tecnológico com soluções eficientes e humanas."
+      "objective": "Inovar o mercado tecnológico com soluções eficientes e humanas.",
+      "avatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbS13GsqAUT6e72wJQ1ueAfiYif5xOn0iRhA&s"
     },
     {
       "id": "103",
@@ -95,7 +114,8 @@
       "cnpj": "98.765.432/0001-10",
       "yearFoundation": 2015,
       "employersNumber": 80,
-      "objective": "Transformar ideias em softwares inteligentes e acessíveis."
+      "objective": "Transformar ideias em softwares inteligentes e acessíveis.",
+      "avatar": "https://media.licdn.com/dms/image/v2/C510BAQEgzZrDAo2-KA/company-logo_200_200/company-logo_200_200/0/1630579186122/king_group_india_logo?e=2147483647&v=beta&t=SJNQkT-D8Lt9fXa5ex1vgR2Hd32ix9tuOCbzRzTnYxE"
     }
   ]
 }

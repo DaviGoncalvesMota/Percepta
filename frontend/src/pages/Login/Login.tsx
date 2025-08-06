@@ -14,11 +14,12 @@ import { baseURL } from "../../baseURL";
 import { useContext, useState } from "react";
 import { ThemeContext } from "../../context/Theme/ThemeContext";
 import { Brightness5, DarkMode } from "@mui/icons-material";
+import { UserContext } from "../../context/User/UserContext";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [userType, setUserType] = useState<"employer" | "enterprise" | "">("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const {userRole, setUserRole} = useContext(UserContext);
 
   const authUser = () => {
     if (!email || !password) {
@@ -26,12 +27,12 @@ const Login = () => {
       return;
     }
 
-    if (!userType) {
+    if (!userRole) {
       alert("Por favor, selecione o tipo de usuário.");
       return;
     }
 
-    if (userType == "employer") {
+    if (userRole == "employer") {
       axios
         .get(
           baseURL + "/employers" + "?email=" + email + "&password=" + password
@@ -48,14 +49,14 @@ const Login = () => {
           console.error("Erro ao autenticar usuário:", error);
           alert("Erro ao autenticar usuário Tente novamente.");
         });
-    } else if (userType == "enterprise") {
+    } else if (userRole == "company") {
       axios
         .get(
-          baseURL + "/enterprises" + "?email=" + email + "&password=" + password
+          baseURL + "/companies" + "?email=" + email + "&password=" + password
         )
         .then((response) => {
           if (response.data) {
-            localStorage.setItem("enterprise", JSON.stringify(response.data));
+            localStorage.setItem("user", JSON.stringify(response.data[0].id));
             window.location.href = "/allfeedbacks/" + response.data[0].id;
           } else {
             alert("Usuário ou senha inválidos");
@@ -110,8 +111,8 @@ const Login = () => {
             <Stack direction="row" spacing={2} justifyContent="center" mt={2}>
               <>
                 <Button
-                  onClick={() => setUserType("employer")}
-                  variant={userType === "employer" ? "contained" : "outlined"}
+                  onClick={() => setUserRole("employer")}
+                  variant={userRole === "employer" ? "contained" : "outlined"}
                   color="primary"
                   component={Link}
                   to="/login"
@@ -119,8 +120,8 @@ const Login = () => {
                   Funcionário
                 </Button>
                 <Button
-                  onClick={() => setUserType("enterprise")}
-                  variant={userType === "enterprise" ? "contained" : "outlined"}
+                  onClick={() => setUserRole("company")}
+                  variant={userRole === "company" ? "contained" : "outlined"}
                   color="primary"
                   component={Link}
                   to="/login"

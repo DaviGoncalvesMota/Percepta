@@ -1,4 +1,4 @@
-export interface IEnterprises {
+export interface ICompanies {
     id: string;
     name: string;
     email: string;
@@ -9,4 +9,5 @@ export interface IEnterprises {
     yearFoundation: number;
     employersNumber: number;
     objective: string;
+    avatar: string;
 }

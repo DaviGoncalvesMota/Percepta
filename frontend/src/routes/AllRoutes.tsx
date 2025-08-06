@@ -12,6 +12,7 @@ import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import ForgotPassword from "../pages/ForgotPassword/ForgotPassword";
 import AllFeedbacks from "../pages/AllFeedbacks/AllFeedbacks";
+import AvailableUsers from "../pages/AvailableUsers/AvailableUsers";
 
 const AllRoutes = () => {
   return (
@@ -26,6 +27,7 @@ const AllRoutes = () => {
           <Route path="/details/:id/:userId" element={<Details />} />
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="/ia/:id" element={<IA />} />
+          <Route path="/availableusers/:id" element={<AvailableUsers />} />
           <Route path="*" element={<NotFound />} />
         </Route>
         <Route path="/login" element={<Login />} />

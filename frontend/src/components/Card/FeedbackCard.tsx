@@ -9,10 +9,10 @@ import {
   Stack,
 } from "@mui/material";
 import { Category, CalendarToday } from "@mui/icons-material";
-import type { ICard } from "../../interfaces/ICard";
+import type { IFeedbackCard } from "../../interfaces/ICard";
 import { Link } from "react-router-dom";
 
-const Card = ({
+const FeedbackCard = ({
   id,
   rating,
   category,
@@ -21,7 +21,7 @@ const Card = ({
   reviewerName,
   revieweeName,
   userIdByParams,
-}: ICard) => {
+}: IFeedbackCard) => {
   
   return (
     <CardComponent
@@ -51,7 +51,7 @@ const Card = ({
           </Box>
 
           <Typography variant="body1" sx={{ mt: 1.5 }}>
-            "{comment.slice(0, 40)}{comment.length > 40 ? "..." : ""}"
+            "{comment.slice(0, 35)}{comment.length > 35 ? "..." : ""}"
           </Typography>
 
           <Box display="flex" alignItems="center" gap={1} mt={2}>
@@ -79,4 +79,4 @@ const Card = ({
   );
 };
 
-export default Card;
+export default FeedbackCard;

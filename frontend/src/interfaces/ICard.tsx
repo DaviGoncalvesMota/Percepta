@@ -1,4 +1,4 @@
-export interface ICard {
+export interface IFeedbackCard {
   id: string;
   rating: number;
   comment: string;
@@ -13,4 +13,11 @@ export interface ICard {
   reviewerName: string;
   revieweeName: string;
   userIdByParams?: string;
+}
+
+export interface ICompanyCard {
+  name: string;
+  logo: string;
+  userId?: string;
+  revieweeId: string
 }

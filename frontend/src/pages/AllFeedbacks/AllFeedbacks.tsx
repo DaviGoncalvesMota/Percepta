@@ -2,12 +2,18 @@ import { Box, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { baseURL } from "../../baseURL";
-import Card from "../../components/Card/Card";
-import type { ICard } from "../../interfaces/ICard";
+import type { IFeedbackCard } from "../../interfaces/ICard";
 import { useParams } from "react-router-dom";
+import FeedbackCard from "../../components/Card/FeedbackCard";
 
 const AllFeedbacks = () => {
-  const [feedbacks, setFeedbacks] = useState<ICard[]>([]);
+
+  const isAuthenticated = localStorage.getItem("user");
+  if (!isAuthenticated) {
+    window.location.href = "/login";
+  }
+
+  const [feedbacks, setFeedbacks] = useState<IFeedbackCard[]>([]);
 
   const userIdByParams = useParams().id;
 
@@ -41,12 +47,12 @@ const AllFeedbacks = () => {
 
         <Box sx={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "center" }}>
           {feedbacks.length > 0 ? (
-            feedbacks.filter((e) => e.category == "empresa").map((feedback: ICard, index) => {
+            feedbacks.filter((e) => e.revieweeRole == "company").map((feedback: IFeedbackCard, index) => {
               return (
-                <Card
+                <FeedbackCard
                   id={feedback.id}
-                  category={feedback.category}
                   rating={feedback.rating}
+                  category={feedback.category}
                   comment={feedback.comment}
                   date={feedback.date}
                   reviewerName={feedback.reviewerName}

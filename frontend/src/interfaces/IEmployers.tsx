@@ -6,4 +6,5 @@ export interface IEmployers {
     phone: string;
     address: string;
     role: string;
+    avatar: string;
 }
