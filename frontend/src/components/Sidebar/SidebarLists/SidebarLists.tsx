@@ -1,12 +1,13 @@
 import { Feedback, Forum, Info, Dashboard, AccountCircle, SmartToy } from "@mui/icons-material";
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Lists = () => {
     
   const [ open ] = useState(true);
   const userId = useParams().id;
+  const navigate = useNavigate()
 
   const items = [
     { text: "Feed ", icon: <Forum />, path: "/allfeedbacks/" + userId },
@@ -23,7 +24,7 @@ const Lists = () => {
         {items.map((item, index) => (
           <ListItem key={index} disablePadding sx={{ display: "block" }}>
             <ListItemButton
-              onClick={() => window.location.href = item.path}
+              onClick={() => navigate(item.path)}
               sx={[
                 {
                   minHeight: 48,

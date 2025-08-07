@@ -21,3 +21,13 @@ export interface ICompanyCard {
   userId?: string;
   revieweeId: string
 }
+
+export interface IProfileCard {
+  id: string,
+  avatar: string,
+  name: string,
+  email: string,
+  phone: string,
+  address: string,
+  setDialog: (dialog: React.ReactNode) => void;
+}

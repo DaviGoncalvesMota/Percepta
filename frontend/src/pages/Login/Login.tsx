@@ -9,7 +9,7 @@ import {
   IconButton,
 } from "@mui/material";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { baseURL } from "../../baseURL";
 import { useContext, useState } from "react";
 import { ThemeContext } from "../../context/Theme/ThemeContext";
@@ -19,7 +19,10 @@ import { UserContext } from "../../context/User/UserContext";
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const {userRole, setUserRole} = useContext(UserContext);
+  const { userRole, setUserRole } = useContext(UserContext);
+  const { themeMode, setThemeMode } = useContext(ThemeContext);
+
+  const navigate = useNavigate()
 
   const authUser = () => {
     if (!email || !password) {
@@ -32,44 +35,24 @@ const Login = () => {
       return;
     }
 
-    if (userRole == "employer") {
-      axios
-        .get(
-          baseURL + "/employers" + "?email=" + email + "&password=" + password
-        )
-        .then((response) => {
-          if (response.data) {
-            localStorage.setItem("user", JSON.stringify(response.data[0].id));
-            window.location.href = "/allfeedbacks/" + response.data[0].id;
-          } else {
-            alert("Usuário ou senha inválidos");
-          }
-        })
-        .catch((error) => {
-          console.error("Erro ao autenticar usuário:", error);
-          alert("Erro ao autenticar usuário Tente novamente.");
-        });
-    } else if (userRole == "company") {
-      axios
-        .get(
-          baseURL + "/companies" + "?email=" + email + "&password=" + password
-        )
-        .then((response) => {
-          if (response.data) {
-            localStorage.setItem("user", JSON.stringify(response.data[0].id));
-            window.location.href = "/allfeedbacks/" + response.data[0].id;
-          } else {
-            alert("Usuário ou senha inválidos");
-          }
-        })
-        .catch((error) => {
-          console.error("Erro ao autenticar empresa:", error);
-          alert("Erro ao autenticar empresa. Tente novamente.");
-        });
-    }
-  };
+    const endpoint =
+      userRole === "employer" ? "employers" : "companies";
 
-  const { themeMode, setThemeMode } = useContext(ThemeContext);
+    axios
+      .get(`${baseURL}/${endpoint}?email=${email}&password=${password}`)
+      .then((response) => {
+        if (response.data.length > 0) {
+          localStorage.setItem("user", JSON.stringify(response.data[0].id));
+          navigate("/allfeedbacks/" + response.data[0].id)
+        } else {
+          alert("Usuário ou senha inválidos");
+        }
+      })
+      .catch((error) => {
+        console.error("Erro ao autenticar:", error);
+        alert("Erro ao autenticar. Tente novamente.");
+      });
+  };
 
   const handleTheme = () => {
     setThemeMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
@@ -77,12 +60,22 @@ const Login = () => {
 
   return (
     <>
-      <Box sx={{ display: "flex", justifyContent: "flex-end", backgroundColor: "background.paper", position: "fixed", width: "100%", p: 1 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          backgroundColor: "background.paper",
+          position: "fixed",
+          width: "100%",
+          p: 1,
+        }}
+      >
         <IconButton size="large" onClick={handleTheme} color="inherit">
           {themeMode === "light" ? <DarkMode /> : <Brightness5 />}
         </IconButton>
       </Box>
 
+      {/* Card de login */}
       <Box
         display="flex"
         justifyContent="center"
@@ -109,26 +102,20 @@ const Login = () => {
             </Typography>
 
             <Stack direction="row" spacing={2} justifyContent="center" mt={2}>
-              <>
-                <Button
-                  onClick={() => setUserRole("employer")}
-                  variant={userRole === "employer" ? "contained" : "outlined"}
-                  color="primary"
-                  component={Link}
-                  to="/login"
-                >
-                  Funcionário
-                </Button>
-                <Button
-                  onClick={() => setUserRole("company")}
-                  variant={userRole === "company" ? "contained" : "outlined"}
-                  color="primary"
-                  component={Link}
-                  to="/login"
-                >
-                  Empresa
-                </Button>
-              </>
+              <Button
+                onClick={() => setUserRole("employer")}
+                variant={userRole === "employer" ? "contained" : "outlined"}
+                color="primary"
+              >
+                Funcionário
+              </Button>
+              <Button
+                onClick={() => setUserRole("company")}
+                variant={userRole === "company" ? "contained" : "outlined"}
+                color="primary"
+              >
+                Empresa
+              </Button>
             </Stack>
 
             <Stack spacing={3} mt={3}>

@@ -16,7 +16,7 @@ const AvailableUsers = () => {
   const userId = useParams().id
 
   useEffect(() => {
-    if(userRole == "companies"){
+    if(userRole == "employer"){
       axios
       .get(baseURL + "/companies")
       .then((res) => setCompanies(res.data))

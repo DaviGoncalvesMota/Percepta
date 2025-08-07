@@ -7,7 +7,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import type { IForms } from "../../interfaces/IForms";
 import { Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { ReviewContext } from "../../context/Review/ReviewContext";
@@ -17,8 +16,13 @@ import { UserContext } from "../../context/User/UserContext";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { companyCategories, employeeCategories } from "../../data/categories";
 
-const Forms = ({ categories, userId }: IForms) => {
+type FormUserId = {
+  userId: string | undefined
+}
+
+const FeedbackForm = ({userId}: FormUserId) => {
   const { revieweeName, revieweeId } = useContext(ReviewContext);
   const { userRole } = useContext(UserContext);
   const [rating, setRating] = useState<number | null>(null);
@@ -31,16 +35,26 @@ const Forms = ({ categories, userId }: IForms) => {
   const date = dayjs();
 
   useEffect(() => {
-    if (userRole == "employer") {
-      axios
-        .get(baseURL + "/employers?id=" + userId)
-        .then((response) => setCurrentUser(response.data[0].name))
-        .catch((err) => console.log(err));
-    } else {
-      axios
-        .get(baseURL + "/companies?id=" + userId)
-        .then((response) => setCurrentUser(response.data[0].name))
-        .catch((err) => console.log(err));
+    const fetchUser = async () => {
+      try {
+        const endpoint = userRole === "employer" ? "/employers" : "/companies";
+
+        const response = await axios.get(`${baseURL}${endpoint}?id=${userId}`);
+
+        const name = response.data[0].name;
+
+        if (name) {
+          setCurrentUser(name);
+        } else {
+          console.warn("Usuário não encontrado.");
+        }
+      } catch (err) {
+        console.error("Erro ao buscar usuário:", err);
+      }
+    };
+
+    if (userId && userRole) {
+      fetchUser();
     }
   }, [userId, userRole]);
 
@@ -68,8 +82,8 @@ const Forms = ({ categories, userId }: IForms) => {
       .catch((err) => console.log(err));
   };
 
-  const verifyUserForm = () => {
-    if (userRole == "company") {
+  const verifyForm = () => {
+    if (userRole === "company") {
       return (
         <>
           <TextField
@@ -83,17 +97,15 @@ const Forms = ({ categories, userId }: IForms) => {
 
           <Button
             component={Link}
-            to={"/availableusers/" + userId}
+            to={`/availableusers/${userId}`}
             variant="contained"
           >
-            {" "}
             Escolha o Funcionário
           </Button>
         </>
       );
-    }
-    else if (userRole == "employer") {
-       return (
+    } else if (userRole === "employer") {
+      return (
         <>
           <TextField
             label="Nome da Empresa"
@@ -106,11 +118,10 @@ const Forms = ({ categories, userId }: IForms) => {
 
           <Button
             component={Link}
-            to={"/availableusers/" + userId}
+            to={`/availableusers/${userId}`}
             variant="contained"
           >
-            {" "}
-            Escolha o Funcionário
+            Escolha a Empresa
           </Button>
         </>
       );
@@ -124,7 +135,9 @@ const Forms = ({ categories, userId }: IForms) => {
           <DatePicker sx={{ display: "none" }} value={date} readOnly />
         </LocalizationProvider>
 
-        {verifyUserForm()}
+        {userRole === "company" || userRole === "employer"
+          ? verifyForm()
+          : "nao tem valor"}
 
         <Box>
           <Typography component="legend">Nota</Typography>
@@ -162,11 +175,17 @@ const Forms = ({ categories, userId }: IForms) => {
           fullWidth
           value={category}
         >
-          {categories.map((option, i) => (
-            <MenuItem key={i} value={option}>
-              {option}
-            </MenuItem>
-          ))}
+          {userRole === "employers"
+            ? companyCategories.map((option, i) => (
+                <MenuItem key={i} value={option}>
+                  {option}
+                </MenuItem>
+              ))
+            : employeeCategories.map((option, i) => (
+                <MenuItem key={i} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
         </TextField>
 
         <TextField
@@ -191,4 +210,4 @@ const Forms = ({ categories, userId }: IForms) => {
   );
 };
 
-export default Forms;
+export default FeedbackForm;

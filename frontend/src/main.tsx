@@ -9,14 +9,14 @@ import { UserContextProvider } from "./context/User/UserContext";
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
-    <ThemeContextProvider>
-      <OpenContextProvider>
-        <ReviewContextProvider>
-          <UserContextProvider>
+    <UserContextProvider>
+      <ThemeContextProvider>
+        <OpenContextProvider>
+          <ReviewContextProvider>
             <AllRoutes />
-          </UserContextProvider>
-        </ReviewContextProvider>
-      </OpenContextProvider>
-    </ThemeContextProvider>
+          </ReviewContextProvider>
+        </OpenContextProvider>
+      </ThemeContextProvider>
+    </UserContextProvider>
   </BrowserRouter>
 );

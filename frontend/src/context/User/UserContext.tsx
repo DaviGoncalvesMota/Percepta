@@ -2,7 +2,7 @@
 import React, { createContext, useState } from "react";
 
 type UserContextType = {
-  userRole: string;
+  userRole: string | "";
   setUserRole: React.Dispatch<React.SetStateAction<string>>;
 };
 
@@ -14,7 +14,7 @@ export const UserContext = createContext<UserContextType>({
 export const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [userRole, setUserRole] = useState<string>("");
+  const [userRole, setUserRole] = useState<string | "">("");
 
   return (
     <UserContext.Provider value={{userRole, setUserRole}}>
