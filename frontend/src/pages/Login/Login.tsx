@@ -22,7 +22,7 @@ const Login = () => {
   const { userRole, setUserRole } = useContext(UserContext);
   const { themeMode, setThemeMode } = useContext(ThemeContext);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const authUser = () => {
     if (!email || !password) {
@@ -35,15 +35,14 @@ const Login = () => {
       return;
     }
 
-    const endpoint =
-      userRole === "employer" ? "employers" : "companies";
+    const endpoint = userRole === "employer" ? "employers" : "companies";
 
     axios
       .get(`${baseURL}/${endpoint}?email=${email}&password=${password}`)
       .then((response) => {
         if (response.data.length > 0) {
-          localStorage.setItem("user", JSON.stringify(response.data[0].id));
-          navigate("/allfeedbacks/" + response.data[0].id)
+          localStorage.setItem("user", JSON.parse(response.data[0].id));
+          navigate("/");
         } else {
           alert("Usuário ou senha inválidos");
         }

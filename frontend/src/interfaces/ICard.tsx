@@ -23,11 +23,11 @@ export interface ICompanyCard {
 }
 
 export interface IProfileCard {
-  id: string,
-  avatar: string,
-  name: string,
-  email: string,
-  phone: string,
-  address: string,
-  setDialog: (dialog: React.ReactNode) => void;
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+  phone: string;
+  address: string;
+  setDialog: React.Dispatch<React.SetStateAction<React.ReactNode>>
 }

@@ -12,7 +12,15 @@ import {
 import Dialog from "../Dialog/Dialog";
 import type { IProfileCard } from "../../interfaces/ICard";
 
-const ProfileCard = ({id, name, email, avatar, phone, address, setDialog}: IProfileCard) => {
+const ProfileCard = ({
+  id,
+  name,
+  email,
+  avatar,
+  phone,
+  address,
+  setDialog,
+}: IProfileCard) => {
   return (
     <Card
       key={id}
@@ -70,7 +78,7 @@ const ProfileCard = ({id, name, email, avatar, phone, address, setDialog}: IProf
             >
               <Button
                 onClick={() =>
-                  setDialog(<Dialog onClose={() => setDialog(false)} />)
+                  setDialog(<Dialog onClose={() => setDialog(false)} userId={id} />)
                 }
                 variant="outlined"
                 color="warning"
@@ -79,7 +87,10 @@ const ProfileCard = ({id, name, email, avatar, phone, address, setDialog}: IProf
                 Editar Perfil{" "}
               </Button>
               <Button
-                onClick={() => localStorage.removeItem("user")}
+                onClick={() => {
+                  localStorage.removeItem("user");
+                  window.location.reload()
+                }}
                 variant="outlined"
                 color="error"
               >

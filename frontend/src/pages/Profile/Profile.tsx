@@ -4,9 +4,8 @@ import axios from "axios";
 import { baseURL } from "../../baseURL";
 import { useParams } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
-import type { IEmployers } from "../../interfaces/IEmployers";
 import { UserContext } from "../../context/User/UserContext";
-import type { ICompanies } from "../../interfaces/ICompanies";
+import type { IUsers } from "../../interfaces/IUsers";
 import ProfileCard from "../../components/Card/ProfileCard";
 
 const Profile = () => {
@@ -18,8 +17,8 @@ const Profile = () => {
   const { userRole } = useContext(UserContext);
 
   const id = useParams().id;
-  const [employers, setEmployers] = useState<IEmployers[]>([]);
-  const [companies, setCompanies] = useState<ICompanies[]>([]);
+  const [employers, setEmployers] = useState<IUsers[]>([]);
+  const [companies, setCompanies] = useState<IUsers[]>([]);
   const [dialog, setDialog] = useState<React.ReactNode>();
 
   useEffect(() => {
@@ -62,8 +61,9 @@ const Profile = () => {
         }}
       >
         {userRole == "employer"
-          ? employers.map((employer) => (
+          ? employers.map((employer, index) => (
               <ProfileCard
+                key={index}
                 id={employer.id}
                 name={employer.name}
                 email={employer.email}
@@ -73,8 +73,9 @@ const Profile = () => {
                 setDialog={setDialog}
               />
             ))
-          : companies.map((company) => (
+          : companies.map((company, index) => (
               <ProfileCard
+                key={index}
                 id={company.id}
                 name={company.name}
                 email={company.email}

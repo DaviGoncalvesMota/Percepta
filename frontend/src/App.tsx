@@ -7,8 +7,9 @@ import AppBar from "./components/Appbar/Appbar";
 import { OpenContext } from "./context/Open/OpenContext";
 
 function App() {
+
   const { themeMode } = useContext(ThemeContext);
-  const {open, setOpen} = useContext(OpenContext);
+  const { open, setOpen } = useContext(OpenContext);
 
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
@@ -16,7 +17,7 @@ function App() {
   return (
     <ThemeProvider theme={themeMode === "dark" ? darkTheme : lightTheme}>
       <CssBaseline />
-      <AppBar open={open} handleDrawerOpen={handleDrawerOpen}/>
+      <AppBar open={open} handleDrawerOpen={handleDrawerOpen} />
       <Sidebar open={open} handleDrawerClose={handleDrawerClose} />
     </ThemeProvider>
   );

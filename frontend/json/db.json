@@ -63,13 +63,12 @@
   ],
   "employers": [
     {
-      "id": "201",
-      "name": "Maria Silva",
+      "name": "Maria",
       "email": "maria@gmail.com",
-      "password": "1234",
       "phone": "11988887777",
+      "avatar": "https://m.media-amazon.com/images/M/MV5BMTE3YjhhMTQtYmUyYy00MWU5LTg4N2YtMTkxMDI0Y2FhMzg3XkEyXkFqcGc@._V1_QL75_UX500_CR0,0,500,281_.jpg",
       "address": "Rua das Flores, 123, São Paulo, SP",
-      "avatar": "https://m.media-amazon.com/images/M/MV5BMTE3YjhhMTQtYmUyYy00MWU5LTg4N2YtMTkxMDI0Y2FhMzg3XkEyXkFqcGc@._V1_QL75_UX500_CR0,0,500,281_.jpg"
+      "id": "201"
     },
     {
       "id": "202",
@@ -92,17 +91,12 @@
   ],
   "companies": [
     {
-      "id": "102",
       "name": "TechCorp",
       "email": "techcorp@gmail.com",
-      "password": "4321",
       "phone": "1133334444",
+      "avatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbS13GsqAUT6e72wJQ1ueAfiYif5xOn0iRhA&s",
       "address": "Av. Tecnologia, 456, São Paulo, SP",
-      "cnpj": "12.345.678/0001-90",
-      "yearFoundation": 2010,
-      "employersNumber": 120,
-      "objective": "Inovar o mercado tecnológico com soluções eficientes e humanas.",
-      "avatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbS13GsqAUT6e72wJQ1ueAfiYif5xOn0iRhA&s"
+      "id": "102"
     },
     {
       "id": "103",

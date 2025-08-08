@@ -1,17 +1,16 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { baseURL } from "../../baseURL";
-import type { ICompanies } from "../../interfaces/ICompanies";
+import type { IUsers } from "../../interfaces/IUsers";
 import { Box } from "@mui/material";
 import { useParams } from "react-router-dom";
-import type { IEmployers } from "../../interfaces/IEmployers";
 import { UserContext } from "../../context/User/UserContext";
 import UserCard from "../../components/Card/UserCard";
 
 const AvailableUsers = () => {
   const { userRole } = useContext(UserContext)
-  const [companies, setCompanies] = useState<ICompanies[]>([]);
-  const [employers, setEmployers] = useState<IEmployers[]>([])
+  const [companies, setCompanies] = useState<IUsers[]>([]);
+  const [employers, setEmployers] = useState<IUsers[]>([])
 
   const userId = useParams().id
 
