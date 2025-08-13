@@ -3,14 +3,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { baseURL } from "../../baseURL";
 import type { IFeedbackCard } from "../../interfaces/ICard";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import FeedbackCard from "../../components/Card/FeedbackCard";
 
 const AllFeedbacks = () => {
-
+  const navigate = useNavigate();
   const isAuthenticated = localStorage.getItem("user");
-  if (!isAuthenticated) {
-    window.location.href = "/login";
+  const isUserRoleTrue = localStorage.getItem("userRole");
+  if (!isAuthenticated || !isUserRoleTrue) {
+    navigate("/login");
   }
 
   const [feedbacks, setFeedbacks] = useState<IFeedbackCard[]>([]);
@@ -45,29 +46,38 @@ const AllFeedbacks = () => {
           Aqui estão todos os feedbacks das empresas.
         </Typography>
 
-        <Box sx={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "center" }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 5,
+            flexWrap: "wrap",
+            justifyContent: "center",
+          }}
+        >
           {feedbacks.length > 0 ? (
-            feedbacks.filter((e) => e.revieweeRole == "company").map((feedback: IFeedbackCard, index) => {
-              return (
-                <FeedbackCard
-                  id={feedback.id}
-                  rating={feedback.rating}
-                  category={feedback.category}
-                  comment={feedback.comment}
-                  date={feedback.date}
-                  reviewerName={feedback.reviewerName}
-                  revieweeName={feedback.revieweeName}
-                  userIdByParams={userIdByParams}
-                  reviewerId={feedback.reviewerId}
-                  positivePoint={feedback.positivePoint}
-                  negativePoint={feedback.negativePoint}
-                  revieweeId={feedback.revieweeId}
-                  reviewerRole={feedback.reviewerRole}
-                  revieweeRole={feedback.revieweeRole}
-                  key={index}
-                />
-              );
-            })
+            feedbacks
+              .filter((e) => e.revieweeRole == "company")
+              .map((feedback: IFeedbackCard, index) => {
+                return (
+                  <FeedbackCard
+                    id={feedback.id}
+                    rating={feedback.rating}
+                    category={feedback.category}
+                    comment={feedback.comment}
+                    date={feedback.date}
+                    reviewerName={feedback.reviewerName}
+                    revieweeName={feedback.revieweeName}
+                    userIdByParams={userIdByParams}
+                    reviewerId={feedback.reviewerId}
+                    positivePoint={feedback.positivePoint}
+                    negativePoint={feedback.negativePoint}
+                    revieweeId={feedback.revieweeId}
+                    reviewerRole={feedback.reviewerRole}
+                    revieweeRole={feedback.revieweeRole}
+                    key={index}
+                  />
+                );
+              })
           ) : (
             <Typography variant="body2" color="text.secondary" align="center">
               Sem feedbacks disponíveis no momento.

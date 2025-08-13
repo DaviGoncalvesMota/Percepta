@@ -1,9 +1,12 @@
 import { Box, Paper, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const About = () => {
+  const navigate = useNavigate();
   const isAuthenticated = localStorage.getItem("user");
-  if (!isAuthenticated) {
-    window.location.href = "/login";
+  const isUserRoleTrue = localStorage.getItem("userRole");
+  if (!isAuthenticated || !isUserRoleTrue) {
+    navigate("/login");
   }
 
   return (

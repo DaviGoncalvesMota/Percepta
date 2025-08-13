@@ -59,6 +59,66 @@
       "revieweeName": "InovaSoft",
       "reviewerRole": "employer",
       "revieweeRole": "company"
+    },
+    {
+      "id": "f4",
+      "rating": 2,
+      "comment": "Atendimento lento e pouco interesse em resolver o problema.",
+      "positivePoint": "Equipe cordial",
+      "negativePoint": "Demora nas respostas",
+      "category": "Atendimento",
+      "date": "2025-08-02T10:00:00Z",
+      "reviewerId": "204",
+      "revieweeId": "102",
+      "reviewerRole": "employer",
+      "revieweeRole": "company",
+      "reviewerName": "João Pereira",
+      "revieweeName": "TechCorp"
+    },
+    {
+      "id": "f5",
+      "rating": 5,
+      "comment": "Serviço rápido e suporte impecável.",
+      "positivePoint": "Resolução rápida de problemas",
+      "negativePoint": "Poderia oferecer mais descontos",
+      "category": "Serviço",
+      "date": "2025-08-05T14:00:00Z",
+      "reviewerId": "205",
+      "revieweeId": "102",
+      "reviewerRole": "employer",
+      "revieweeRole": "company",
+      "reviewerName": "Lucas Andrade",
+      "revieweeName": "TechCorp"
+    },
+    {
+      "id": "f6",
+      "rating": 4,
+      "comment": "Boa comunicação e prazos cumpridos.",
+      "positivePoint": "Organização e clareza",
+      "negativePoint": "Preços um pouco altos",
+      "category": "Serviço",
+      "date": "2025-08-07T09:30:00Z",
+      "reviewerId": "206",
+      "revieweeId": "102",
+      "reviewerRole": "employer",
+      "revieweeRole": "company",
+      "reviewerName": "Ana Costa",
+      "revieweeName": "TechCorp"
+    },
+    {
+      "id": "f7",
+      "rating": 1,
+      "comment": "Produto entregue com defeito e sem suporte adequado.",
+      "positivePoint": "Boa apresentação inicial",
+      "negativePoint": "Falta de suporte pós-venda",
+      "category": "Produto",
+      "date": "2025-08-08T11:15:00Z",
+      "reviewerId": "207",
+      "revieweeId": "102",
+      "reviewerRole": "employer",
+      "revieweeRole": "company",
+      "reviewerName": "Beatriz Mendes",
+      "revieweeName": "TechCorp"
     }
   ],
   "employers": [
@@ -87,6 +147,38 @@
       "phone": "1188776655",
       "address": "Rua Central, 50, Campinas, SP",
       "avatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTupBOijhzmFUrFqAxKj67wt_cmcVELplmu4w&s"
+    },
+    {
+      "id": "204",
+      "name": "João Pereira",
+      "email": "joao@gmail.com",
+      "phone": "1177776666",
+      "address": "Rua Nova, 99, Santo André, SP",
+      "avatar": "https://i.pravatar.cc/150?img=1"
+    },
+    {
+      "id": "205",
+      "name": "Lucas Andrade",
+      "email": "lucas@gmail.com",
+      "phone": "1166665555",
+      "address": "Av. Paulista, 1000, São Paulo, SP",
+      "avatar": "https://i.pravatar.cc/150?img=2"
+    },
+    {
+      "id": "206",
+      "name": "Ana Costa",
+      "email": "ana@gmail.com",
+      "phone": "1155554444",
+      "address": "Rua das Palmeiras, 45, São Paulo, SP",
+      "avatar": "https://i.pravatar.cc/150?img=3"
+    },
+    {
+      "id": "207",
+      "name": "Beatriz Mendes",
+      "email": "beatriz@gmail.com",
+      "phone": "1144443333",
+      "address": "Rua do Sol, 200, Guarulhos, SP",
+      "avatar": "https://i.pravatar.cc/150?img=4"
     }
   ],
   "companies": [

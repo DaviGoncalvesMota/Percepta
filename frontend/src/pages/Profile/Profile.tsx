@@ -2,19 +2,21 @@
 import { Box } from "@mui/material";
 import axios from "axios";
 import { baseURL } from "../../baseURL";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/User/UserContext";
 import type { IUsers } from "../../interfaces/IUsers";
 import ProfileCard from "../../components/Card/ProfileCard";
 
 const Profile = () => {
+  const navigate = useNavigate();
+  
   const isAuthenticated = localStorage.getItem("user");
-  if (!isAuthenticated) {
-    window.location.href = "/login";
-  }
-
   const { userRole } = useContext(UserContext);
+
+  if (!isAuthenticated || !userRole) {
+    navigate("/login");
+  }
 
   const id = useParams().id;
   const [employers, setEmployers] = useState<IUsers[]>([]);
@@ -60,31 +62,32 @@ const Profile = () => {
           p: 2,
         }}
       >
-        {userRole == "employer"
-          ? employers.map((employer, index) => (
-              <ProfileCard
-                key={index}
-                id={employer.id}
-                name={employer.name}
-                email={employer.email}
-                avatar={employer.avatar}
-                phone={employer.phone}
-                address={employer.address}
-                setDialog={setDialog}
-              />
-            ))
-          : companies.map((company, index) => (
-              <ProfileCard
-                key={index}
-                id={company.id}
-                name={company.name}
-                email={company.email}
-                avatar={company.avatar}
-                phone={company.phone}
-                address={company.address}
-                setDialog={setDialog}
-              />
-            ))}
+        {userRole == "employer" &&
+          employers.map((employer, index) => (
+            <ProfileCard
+              key={index}
+              id={employer.id}
+              name={employer.name}
+              email={employer.email}
+              avatar={employer.avatar}
+              phone={employer.phone}
+              address={employer.address}
+              setDialog={setDialog}
+            />
+          ))}
+        {userRole == "company" &&
+          companies.map((company, index) => (
+            <ProfileCard
+              key={index}
+              id={company.id}
+              name={company.name}
+              email={company.email}
+              avatar={company.avatar}
+              phone={company.phone}
+              address={company.address}
+              setDialog={setDialog}
+            />
+          ))}
       </Box>
     </>
   );

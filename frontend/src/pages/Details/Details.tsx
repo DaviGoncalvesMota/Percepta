@@ -12,14 +12,17 @@ import {
 import { Category, CalendarToday } from "@mui/icons-material";
 import axios from "axios";
 import { baseURL } from "../../baseURL";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import type { IFeedbackCard } from "../../interfaces/ICard";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { UserContext } from "../../context/User/UserContext";
 
 const Details = () => {
+  const navigate = useNavigate();
   const isAuthenticated = localStorage.getItem("user");
-  if (!isAuthenticated) {
-    window.location.href = "/login";
+  const { userRole } = useContext(UserContext);
+  if (!isAuthenticated || !userRole) {
+    navigate("/login");
   }
 
   const [feedback, setFeedback] = useState<IFeedbackCard | null>(null);

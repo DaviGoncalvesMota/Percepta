@@ -2,12 +2,15 @@ import { Paper, Typography, Box, Button } from "@mui/material";
 import { EmojiPeople } from "@mui/icons-material";
 import { ThemeContext } from "../../context/Theme/ThemeContext";
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../../context/User/UserContext";
 
 const Home = () => {
+  const navigate = useNavigate();
   const isAuthenticated = localStorage.getItem("user");
-  if (!isAuthenticated) {
-    window.location.href = "/login";
+  const { userRole } = useContext(UserContext);
+  if (!isAuthenticated || !userRole) {
+    navigate("/login");
   }
 
   const { themeMode } = useContext(ThemeContext);
@@ -57,7 +60,14 @@ const Home = () => {
           Seu melhor site de Avaliação.
         </Typography>
         <br />
-        <Button component={Link} to={"/allfeedbacks/" + isAuthenticated} variant="contained"> Ir para Feedbacks </Button>
+        <Button
+          component={Link}
+          to={"/allfeedbacks/" + isAuthenticated}
+          variant="contained"
+        >
+          {" "}
+          Ir para Feedbacks{" "}
+        </Button>
       </Paper>
     </Box>
   );

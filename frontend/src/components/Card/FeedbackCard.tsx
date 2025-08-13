@@ -22,18 +22,21 @@ const FeedbackCard = ({
   revieweeName,
   userIdByParams,
 }: IFeedbackCard) => {
-  
   return (
     <CardComponent
       sx={{
-        maxWidth: 400,
+        width: 400, // largura fixa
+        height: 300, // altura fixa
         borderRadius: 3,
         boxShadow: 3,
         p: 2,
         bgcolor: "background.paper",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
       }}
     >
-      <CardContent>
+      <CardContent sx={{ flex: 1 }}>
         <Stack spacing={1}>
           <Typography variant="subtitle2" color="text.secondary">
             Por: <strong>{reviewerName}</strong>
@@ -50,11 +53,21 @@ const FeedbackCard = ({
             </Typography>
           </Box>
 
-          <Typography variant="body1" sx={{ mt: 1.5 }}>
-            "{comment.slice(0, 35)}{comment.length > 35 ? "..." : ""}"
+          <Typography
+            variant="body1"
+            sx={{
+              mt: 1.5,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "-webkit-box",
+              WebkitLineClamp: 2, // limite de linhas
+              WebkitBoxOrient: "vertical",
+            }}
+          >
+             "{comment.slice(0, 35)}{comment.length > 35 ? "..." : ""}"
           </Typography>
 
-          <Box display="flex" alignItems="center" gap={1} mt={2}>
+          <Box display="flex" alignItems="center" gap={1} mt="auto">
             <CalendarToday sx={{ fontSize: 16 }} />
             <Typography variant="caption">{date}</Typography>
           </Box>
@@ -66,13 +79,12 @@ const FeedbackCard = ({
         </Stack>
       </CardContent>
 
-      
       <CardActions>
         <Link
           to={`/details/${id}/${userIdByParams}`}
           style={{ textDecoration: "none" }}
         >
-          <Button size="small"> Detalhes </Button>
+          <Button size="small">Detalhes</Button>
         </Link>
       </CardActions>
     </CardComponent>
