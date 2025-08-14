@@ -15,7 +15,7 @@ export interface IFeedbackCard {
   userIdByParams?: string;
 }
 
-export interface ICompanyCard {
+export interface IUserCard {
   name: string;
   logo: string;
   userId?: string;

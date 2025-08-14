@@ -1,10 +1,10 @@
 import { Card, Typography, Avatar, Button, Box, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
-import type { ICompanyCard } from "../../interfaces/ICard";
+import type { IUserCard } from "../../interfaces/ICard";
 import { useContext } from "react";
 import { ReviewContext } from "../../context/Review/ReviewContext";
 
-const UserCard = ({ name, logo, userId, revieweeId }: ICompanyCard) => {
+const UserCard = ({ name, logo, userId, revieweeId }: IUserCard) => {
   const { setRevieweeName, setRevieweeId } = useContext(ReviewContext);
 
   return (
