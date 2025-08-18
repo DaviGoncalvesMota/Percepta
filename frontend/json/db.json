@@ -13,7 +13,8 @@
       "reviewerRole": "employer",
       "revieweeRole": "company",
       "reviewerName": "Maria Silva",
-      "revieweeName": "TechCorp"
+      "revieweeName": "TechCorp",
+      "revieweeAvatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbS13GsqAUT6e72wJQ1ueAfiYif5xOn0iRhA&s"
     },
     {
       "id": "f2",
@@ -28,7 +29,8 @@
       "reviewerRole": "company",
       "revieweeRole": "employer",
       "reviewerName": "TechCorp",
-      "revieweeName": "Maria Silva"
+      "revieweeName": "Maria Silva",
+      "revieweeAvatar": "https://m.media-amazon.com/images/M/MV5BMTE3YjhhMTQtYmUyYy00MWU5LTg4N2YtMTkxMDI0Y2FhMzg3XkEyXkFqcGc@._V1_QL75_UX500_CR0,0,500,281_.jpg"
     },
     {
       "id": "f3",
@@ -43,7 +45,8 @@
       "reviewerRole": "employer",
       "revieweeRole": "company",
       "reviewerName": "Fernanda Lima",
-      "revieweeName": "TechCorp"
+      "revieweeName": "TechCorp",
+      "revieweeAvatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbS13GsqAUT6e72wJQ1ueAfiYif5xOn0iRhA&s"
     },
     {
       "id": "02e1",
@@ -58,7 +61,8 @@
       "reviewerName": "Maria Silva",
       "revieweeName": "InovaSoft",
       "reviewerRole": "employer",
-      "revieweeRole": "company"
+      "revieweeRole": "company",
+      "revieweeAvatar": "https://media.licdn.com/dms/image/v2/C510BAQEgzZrDAo2-KA/company-logo_200_200/company-logo_200_200/0/1630579186122/king_group_india_logo?e=2147483647&v=beta&t=SJNQkT-D8Lt9fXa5ex1vgR2Hd32ix9tuOCbzRzTnYxE"
     },
     {
       "id": "f4",
@@ -73,7 +77,8 @@
       "reviewerRole": "employer",
       "revieweeRole": "company",
       "reviewerName": "João Pereira",
-      "revieweeName": "TechCorp"
+      "revieweeName": "TechCorp",
+      "revieweeAvatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbS13GsqAUT6e72wJQ1ueAfiYif5xOn0iRhA&s"
     },
     {
       "id": "f5",
@@ -88,7 +93,8 @@
       "reviewerRole": "employer",
       "revieweeRole": "company",
       "reviewerName": "Lucas Andrade",
-      "revieweeName": "TechCorp"
+      "revieweeName": "TechCorp",
+      "revieweeAvatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbS13GsqAUT6e72wJQ1ueAfiYif5xOn0iRhA&s"
     },
     {
       "id": "f6",
@@ -103,7 +109,8 @@
       "reviewerRole": "employer",
       "revieweeRole": "company",
       "reviewerName": "Ana Costa",
-      "revieweeName": "TechCorp"
+      "revieweeName": "TechCorp",
+      "revieweeAvatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbS13GsqAUT6e72wJQ1ueAfiYif5xOn0iRhA&s"
     },
     {
       "id": "f7",
@@ -118,7 +125,8 @@
       "reviewerRole": "employer",
       "revieweeRole": "company",
       "reviewerName": "Beatriz Mendes",
-      "revieweeName": "TechCorp"
+      "revieweeName": "TechCorp",
+      "revieweeAvatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbS13GsqAUT6e72wJQ1ueAfiYif5xOn0iRhA&s"
     }
   ],
   "employers": [

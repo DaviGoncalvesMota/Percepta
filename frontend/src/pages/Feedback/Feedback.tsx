@@ -8,11 +8,12 @@ const Feedback = () => {
   const navigate = useNavigate();
   const isAuthenticated = localStorage.getItem("user");
   const { userRole } = useContext(UserContext);
+
   if (!isAuthenticated || !userRole) {
     navigate("/login");
   }
 
-  const { id: userId } = useParams();
+  const { userId } = useParams();
 
   return (
     <Box

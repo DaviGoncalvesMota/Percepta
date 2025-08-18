@@ -1,22 +1,24 @@
 import { Box, Typography } from "@mui/material";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { baseURL } from "../../baseURL";
 import type { IFeedbackCard } from "../../interfaces/ICard";
 import { useNavigate, useParams } from "react-router-dom";
 import FeedbackCard from "../../components/Card/FeedbackCard";
+import { UserContext } from "../../context/User/UserContext";
 
 const AllFeedbacks = () => {
   const navigate = useNavigate();
   const isAuthenticated = localStorage.getItem("user");
-  const isUserRoleTrue = localStorage.getItem("userRole");
-  if (!isAuthenticated || !isUserRoleTrue) {
+  const { userRole } = useContext(UserContext);
+
+  if (!isAuthenticated || !userRole) {
     navigate("/login");
   }
 
   const [feedbacks, setFeedbacks] = useState<IFeedbackCard[]>([]);
 
-  const userIdByParams = useParams().id;
+  const { userId } = useParams();
 
   useEffect(() => {
     const fetchFeedbacks = async () => {
@@ -67,7 +69,7 @@ const AllFeedbacks = () => {
                     date={feedback.date}
                     reviewerName={feedback.reviewerName}
                     revieweeName={feedback.revieweeName}
-                    userIdByParams={userIdByParams}
+                    userId={userId}
                     reviewerId={feedback.reviewerId}
                     positivePoint={feedback.positivePoint}
                     negativePoint={feedback.negativePoint}

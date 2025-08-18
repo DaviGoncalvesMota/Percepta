@@ -12,7 +12,8 @@ export interface IFeedbackCard {
   revieweeRole: string;
   reviewerName: string;
   revieweeName: string;
-  userIdByParams?: string;
+  userId?: string;
+  revieweeAvatar?: string;
 }
 
 export interface IUserCard {

@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { ReviewContext } from "../../context/Review/ReviewContext";
 import axios from "axios";
@@ -23,6 +23,7 @@ type FormUserId = {
 }
 
 const FeedbackForm = ({userId}: FormUserId) => {
+  const navigate = useNavigate()
   const { revieweeName, revieweeId } = useContext(ReviewContext);
   const { userRole } = useContext(UserContext);
   const [rating, setRating] = useState<number | null>(null);
@@ -31,6 +32,7 @@ const FeedbackForm = ({userId}: FormUserId) => {
   const [category, setCategory] = useState<string>("");
   const [comment, setComment] = useState<string>("");
   const [currentUser, setCurrentUser] = useState<string>("");
+  const [userAvatar, setUserAvatar] = useState<string>("");
 
   const date = dayjs();
 
@@ -42,9 +44,11 @@ const FeedbackForm = ({userId}: FormUserId) => {
         const response = await axios.get(`${baseURL}${endpoint}?id=${userId}`);
 
         const name = response.data[0].name;
+        const avatar = response.data[0].avatar;
 
-        if (name) {
+        if (name && avatar) {
           setCurrentUser(name);
+          setUserAvatar(avatar)
         } else {
           console.warn("Usuário não encontrado.");
         }
@@ -72,12 +76,13 @@ const FeedbackForm = ({userId}: FormUserId) => {
       revieweeName,
       reviewerRole: userRole == "employer" ? "" : "employer",
       revieweeRole: userRole == "company" ? "" : "company",
+      revieweeAvatar: userAvatar
     };
 
     axios
       .post(baseURL + "/feedbacks", feedback)
       .then(function () {
-        window.location.href = "/allfeedbacks/" + userId;
+        navigate("/allfeedbacks/" + userId)
       })
       .catch((err) => console.log(err));
   };

@@ -9,6 +9,7 @@ const Home = () => {
   const navigate = useNavigate();
   const isAuthenticated = localStorage.getItem("user");
   const { userRole } = useContext(UserContext);
+
   if (!isAuthenticated || !userRole) {
     navigate("/login");
   }

@@ -3,6 +3,8 @@ import {
   Delete,
   Edit,
   FilterAlt,
+  ThumbDown,
+  ThumbUp,
 } from "@mui/icons-material";
 import {
   Box,
@@ -14,6 +16,8 @@ import {
   Chip,
   Divider,
   Avatar,
+  Button,
+  Rating,
 } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -28,11 +32,12 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const isAuthenticated = localStorage.getItem("user");
   const { userRole } = useContext(UserContext);
+
   if (!isAuthenticated || !userRole) {
     navigate("/login");
   }
-
-  const { id: userId } = useParams();
+  
+  const { userId: userId } = useParams();
   const [revieweeFeedbacks, setRevieweeFeedbacks] = useState<IFeedbackCard[]>(
     []
   );
@@ -158,8 +163,35 @@ const Dashboard = () => {
         />
       </Box>
 
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 1.5,
+          mb: 3,
+        }}
+      >
+        <ThumbUp color="primary" fontSize="medium" />
+        <Typography
+          variant="h5"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontWeight: "bold",
+            letterSpacing: 1,
+            color: "primary.main",
+            mt: 0.5,
+          }}
+        >
+          Minhas Avaliações
+        </Typography>
+        <ThumbDown color="primary" fontSize="medium" />
+      </Box>
+
       {reviewerFeedbacks.length > 0 ? (
-        reviewerFeedbacks.map((feedback) => (
+        reviewerFeedbacks.map((feedback, index) => (
           <>
             <Box
               sx={{
@@ -168,17 +200,31 @@ const Dashboard = () => {
                 justifyContent: "space-between",
                 pb: "1%",
               }}
+              key={index}
             >
               {/* Esquerda */}
               <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <Avatar />
+                <Avatar src={feedback.revieweeAvatar}/>
                 <Typography>
                   <strong>{feedback.revieweeName}</strong>
                 </Typography>
               </Box>
 
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <strong>Nota:</strong>{" "}
+                <Rating
+                  value={feedback.rating}
+                  precision={0.5}
+                  readOnly
+                  size="medium"
+                />
+              </Box>
+
               {/* Direita */}
               <Box sx={{ display: "flex", gap: 2 }}>
+                <Link to={`/details/${feedback.id}/${userId}`}>
+                  <Button sx={{ mt: 0.5 }}> Detalhes </Button>
+                </Link>
                 <IconButton>
                   <Edit />
                 </IconButton>

@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const Lists = () => {
     
   const [ open ] = useState(true);
-  const userId = useParams().id;
+  const { userId } = useParams();
   const navigate = useNavigate()
 
   const items = [

@@ -18,7 +18,7 @@ const AvailableUsers = () => {
   const [companies, setCompanies] = useState<IUsers[]>([]);
   const [employers, setEmployers] = useState<IUsers[]>([]);
 
-  const userId = useParams().id;
+  const { userId } = useParams();
 
   useEffect(() => {
     if (userRole == "employer") {

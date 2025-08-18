@@ -1,10 +1,13 @@
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../context/User/UserContext";
 
 const IA = () => {
   const navigate = useNavigate();
   const isAuthenticated = localStorage.getItem("user");
-  const isUserRoleTrue = localStorage.getItem("userRole");
-  if (!isAuthenticated || !isUserRoleTrue) {
+  const { userRole } = useContext(UserContext);
+
+  if (!isAuthenticated || !userRole) {
     navigate("/login");
   }
 

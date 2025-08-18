@@ -14,20 +14,20 @@ import axios from "axios";
 import { baseURL } from "../../baseURL";
 import { useContext, useEffect, useState } from "react";
 import type { IFeedbackCard } from "../../interfaces/ICard";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../../context/User/UserContext";
 
 const Details = () => {
   const navigate = useNavigate();
   const isAuthenticated = localStorage.getItem("user");
   const { userRole } = useContext(UserContext);
+
   if (!isAuthenticated || !userRole) {
     navigate("/login");
   }
 
   const [feedback, setFeedback] = useState<IFeedbackCard | null>(null);
   const id = useParams().id;
-  const userId = useParams().userId;
 
   useEffect(() => {
     axios
@@ -131,14 +131,13 @@ const Details = () => {
         </CardContent>
 
         <CardActions sx={{ justifyContent: "center", marginTop: 2 }}>
-          <Link
-            to={`/allfeedbacks/${userId}`}
-            style={{ textDecoration: "none" }}
+          <Button
+            onClick={() => navigate(-1)}
+            variant="contained"
+            color="primary"
           >
-            <Button variant="contained" color="primary">
-              Voltar
-            </Button>
-          </Link>
+            Voltar
+          </Button>
         </CardActions>
       </CardComponent>
     </Box>

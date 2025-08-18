@@ -20,13 +20,13 @@ const FeedbackCard = ({
   date,
   reviewerName,
   revieweeName,
-  userIdByParams,
+  userId,
 }: IFeedbackCard) => {
   return (
     <CardComponent
       sx={{
-        width: 400, // largura fixa
-        height: 300, // altura fixa
+        width: 400,
+        height: 300,
         borderRadius: 3,
         boxShadow: 3,
         p: 2,
@@ -81,7 +81,7 @@ const FeedbackCard = ({
 
       <CardActions>
         <Link
-          to={`/details/${id}/${userIdByParams}`}
+          to={`/details/${id}/${userId}`}
           style={{ textDecoration: "none" }}
         >
           <Button size="small">Detalhes</Button>
