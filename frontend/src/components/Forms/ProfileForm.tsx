@@ -1,79 +1,105 @@
-import { Box, TextField } from "@mui/material";
-import { forwardRef, useImperativeHandle, useState } from "react";
-import type {
-  ProfileFormHandles,
-  ProfileFormProps,
-} from "../../interfaces/IUsers";
+import { Box, Button, TextField } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../context/User/UserContext";
+import axios from "axios";
+import { baseURL } from "../../baseURL";
+import type { IDialogForm } from "../../interfaces/IForms";
+import type { IUsers } from "../../interfaces/IUsers";
 
-const ProfileForm = forwardRef<ProfileFormHandles, ProfileFormProps>(
-  ({ userName, userEmail, userAvatar, userAddress, userPhone }, ref) => {
-    const [name, setName] = useState<string>(userName || "");
-    const [email, setEmail] = useState<string>(userEmail || "");
-    const [avatar, setAvatar] = useState<string>(userAvatar || "");
-    const [phone, setPhone] = useState<string>(userPhone || "");
-    const [address, setAddress] = useState<string>(userAddress || "");
+const ProfileForm = ({ userId, onClose }: IDialogForm) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const { userRole } = useContext(UserContext);
 
-    useImperativeHandle(ref, () => ({
-      getName: () => name,
-      getEmail: () => email,
-      getAvatar: () => avatar,
-      getPhone: () => phone,
-      getAddress: () => address,
-    }));
+  const endpointGet =
+    userRole === "employer" ? "/employers?id=" : "/companies?id=";
 
-    return (
-      <>
-        <Box></Box>
-        <TextField
-          label="Nome"
-          name="name"
-          required
-          fullWidth
-          margin="normal"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+  const endpointPut = userRole === "employer" ? "/employers/" : "/companies/";
 
-        <TextField
-          label="Email"
-          name="email"
-          required
-          fullWidth
-          margin="normal"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <TextField
-          label="Avatar"
-          name="avatar"
-          required
-          fullWidth
-          margin="normal"
-          type="url"
-          value={avatar}
-          onChange={(e) => setAvatar(e.target.value)}
-        />
-        <TextField
-          label="Telefone"
-          name="telefone"
-          required
-          margin="normal"
-          fullWidth
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-        />
-        <TextField
-          label="Endereço"
-          name="endereco"
-          required
-          margin="normal"
-          fullWidth
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-        />
-      </>
-    );
-  }
-);
+  useEffect(() => {
+    axios
+      .get(baseURL + endpointGet + userId)
+      .then((response) => {
+        const user: IUsers = response.data[0];
+        setName(user.name);
+        setEmail(user.email);
+        setAvatar(user.avatar);
+        setPhone(user.phone);
+        setAddress(user.address);
+      })
+      .catch((err) => console.log(err));
+  }, [endpointGet, userId]);
+
+  const handleSubmit = () => {
+    const newUserData = { name, email, phone, avatar, address };
+
+    axios
+      .put(baseURL + endpointPut + userId, newUserData)
+      .then((response) => {
+        const updatedUser: IUsers = response.data[0];
+        onClose(updatedUser);
+      })
+      .catch((err) => console.log(err));
+    window.location.reload();
+  };
+
+  return (
+    <>
+      <Box></Box>
+      <TextField
+        label="Nome"
+        required
+        fullWidth
+        margin="normal"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+
+      <TextField
+        label="Email"
+        required
+        fullWidth
+        margin="normal"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+
+      <TextField
+        label="Avatar"
+        required
+        fullWidth
+        margin="normal"
+        type="url"
+        value={avatar}
+        onChange={(e) => setAvatar(e.target.value)}
+      />
+
+      <TextField
+        label="Telefone"
+        required
+        margin="normal"
+        fullWidth
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+      />
+
+      <TextField
+        label="Endereço"
+        required
+        margin="normal"
+        fullWidth
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+      />
+
+      <Button variant="contained" onClick={handleSubmit}>
+        Concluir
+      </Button>
+    </>
+  );
+};
 
 export default ProfileForm;

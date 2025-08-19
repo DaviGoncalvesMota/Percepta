@@ -1,5 +1,5 @@
 import { useTheme } from "@mui/material/styles";
-import SidebarLists from "./SidebarLists/SidebarLists";
+import SidebarLists from "./components/SidebarLists/SidebarLists";
 import { ChevronRight } from "@mui/icons-material";
 import { Outlet } from "react-router-dom";
 import { Drawer, DrawerHeader } from "../../styles/styles";

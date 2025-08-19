@@ -27,6 +27,7 @@ import axios from "axios";
 import { baseURL } from "../../baseURL";
 import { companyCategories, employeeCategories } from "../../data/categories";
 import React from "react";
+import Dialog from "../../components/Dialog/Dialog";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -36,8 +37,8 @@ const Dashboard = () => {
   if (!isAuthenticated || !userRole) {
     navigate("/login");
   }
-  
-  const { userId: userId } = useParams();
+
+  const { userId } = useParams();
   const [revieweeFeedbacks, setRevieweeFeedbacks] = useState<IFeedbackCard[]>(
     []
   );
@@ -47,6 +48,7 @@ const Dashboard = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [dialog, setDialog] = useState<React.ReactNode>();
   const open = Boolean(anchorEl);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -93,7 +95,8 @@ const Dashboard = () => {
   }, [userId]);
 
   return (
-    <Box>
+    <>
+      {dialog}
       <Box
         display="flex"
         alignItems="center"
@@ -204,7 +207,7 @@ const Dashboard = () => {
             >
               {/* Esquerda */}
               <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <Avatar src={feedback.revieweeAvatar}/>
+                <Avatar src={feedback.revieweeAvatar} />
                 <Typography>
                   <strong>{feedback.revieweeName}</strong>
                 </Typography>
@@ -220,12 +223,22 @@ const Dashboard = () => {
                 />
               </Box>
 
-              {/* Direita */}
               <Box sx={{ display: "flex", gap: 2 }}>
                 <Link to={`/details/${feedback.id}/${userId}`}>
                   <Button sx={{ mt: 0.5 }}> Detalhes </Button>
                 </Link>
-                <IconButton>
+                <IconButton
+                  onClick={() =>
+                    setDialog(
+                      <Dialog
+                        onClose={() => setDialog(false)}
+                        label="dashboard"
+                        userId={userId}
+                        onSubmit={(updatedUser) => updatedUser}
+                      />
+                    )
+                  }
+                >
                   <Edit />
                 </IconButton>
                 <IconButton>
@@ -243,7 +256,7 @@ const Dashboard = () => {
           Avalie clicando <Link to={`/feedback/${userId}`}> aqui </Link>
         </Typography>
       )}
-    </Box>
+    </>
   );
 };
 

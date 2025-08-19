@@ -1,16 +1,15 @@
-// src/pages/ProfilePage.tsx
 import { Box } from "@mui/material";
 import axios from "axios";
 import { baseURL } from "../../baseURL";
 import { useNavigate, useParams } from "react-router-dom";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/User/UserContext";
 import type { IUsers } from "../../interfaces/IUsers";
 import ProfileCard from "../../components/Card/ProfileCard";
+import Dialog from "../../components/Dialog/Dialog"; // importa seu Dialog corrigido
 
 const Profile = () => {
   const navigate = useNavigate();
-  
   const isAuthenticated = localStorage.getItem("user");
   const { userRole } = useContext(UserContext);
 
@@ -18,40 +17,37 @@ const Profile = () => {
     navigate("/login");
   }
 
-  const id = useParams().id;
-  const [employers, setEmployers] = useState<IUsers[]>([]);
-  const [companies, setCompanies] = useState<IUsers[]>([]);
-  const [dialog, setDialog] = useState<React.ReactNode>();
+  const { userId } = useParams();
+  const [user, setUser] = useState<IUsers | null>(null);
+  const [dialog, setDialog] = useState(false);
 
   useEffect(() => {
-    if (userRole == "employer") {
-      axios
-        .get(baseURL + "/employers?id=" + id)
-        .then((response) => {
-          const userData = response.data;
-          if (userData) {
-            setEmployers(userData);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching user data:", error);
-        });
-    } else {
-      axios
-        .get(baseURL + "/companies?id=" + id)
-        .then((response) => {
-          const userData = response.data;
-          if (userData) {
-            setCompanies(userData);
-          }
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [userRole, id]);
+    const endpoint =
+      userRole === "employer" ? "/employers?id=" : "/companies?id=";
+
+    axios
+      .get(baseURL + endpoint + userId)
+      .then((response) => {
+        if (response.data && response.data[0]) {
+          setUser(response.data[0]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
+  }, [userRole, userId]);
 
   return (
     <>
-      {dialog}
+      {dialog && user && (
+        <Dialog
+          userId={user.id}
+          onClose={() => setDialog(false)}
+          onSubmit={(updatedUser) => setUser(updatedUser)}
+          label="profile"
+        />
+      )}
+
       <Box
         sx={{
           minHeight: "50vh",
@@ -62,32 +58,17 @@ const Profile = () => {
           p: 2,
         }}
       >
-        {userRole == "employer" &&
-          employers.map((employer, index) => (
-            <ProfileCard
-              key={index}
-              id={employer.id}
-              name={employer.name}
-              email={employer.email}
-              avatar={employer.avatar}
-              phone={employer.phone}
-              address={employer.address}
-              setDialog={setDialog}
-            />
-          ))}
-        {userRole == "company" &&
-          companies.map((company, index) => (
-            <ProfileCard
-              key={index}
-              id={company.id}
-              name={company.name}
-              email={company.email}
-              avatar={company.avatar}
-              phone={company.phone}
-              address={company.address}
-              setDialog={setDialog}
-            />
-          ))}
+        {user && (
+          <ProfileCard
+            id={user.id}
+            name={user.name}
+            email={user.email}
+            avatar={user.avatar}
+            phone={user.phone}
+            address={user.address}
+            setDialog={() => setDialog(true)}
+          />
+        )}
       </Box>
     </>
   );

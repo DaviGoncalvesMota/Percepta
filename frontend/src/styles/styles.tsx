@@ -2,7 +2,7 @@ import { styled } from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
 import type { IAppBar } from "../interfaces/IAppbar";
 import MuiDrawer from "@mui/material/Drawer";
-import { openedMixin, closedMixin } from "../components/Sidebar/Mixins/SidebarMixins";
+import { openedMixin, closedMixin } from "../components/Sidebar/components/Mixins/SidebarMixins";
 
 const drawerWidth = 240;
 

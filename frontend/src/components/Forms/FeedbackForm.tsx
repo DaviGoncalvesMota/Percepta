@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Divider,
   MenuItem,
   Rating,
   Stack,
@@ -17,13 +18,10 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { companyCategories, employeeCategories } from "../../data/categories";
+import type { IFeedbackForm } from "../../interfaces/IUsers";
 
-type FormUserId = {
-  userId: string | undefined
-}
-
-const FeedbackForm = ({userId}: FormUserId) => {
-  const navigate = useNavigate()
+const FeedbackForm = ({ userId, label }: IFeedbackForm) => {
+  const navigate = useNavigate();
   const { revieweeName, revieweeId } = useContext(ReviewContext);
   const { userRole } = useContext(UserContext);
   const [rating, setRating] = useState<number | null>(null);
@@ -48,7 +46,7 @@ const FeedbackForm = ({userId}: FormUserId) => {
 
         if (name && avatar) {
           setCurrentUser(name);
-          setUserAvatar(avatar)
+          setUserAvatar(avatar);
         } else {
           console.warn("Usuário não encontrado.");
         }
@@ -76,13 +74,13 @@ const FeedbackForm = ({userId}: FormUserId) => {
       revieweeName,
       reviewerRole: userRole == "employer" ? "" : "employer",
       revieweeRole: userRole == "company" ? "" : "company",
-      revieweeAvatar: userAvatar
+      revieweeAvatar: userAvatar,
     };
 
     axios
       .post(baseURL + "/feedbacks", feedback)
       .then(function () {
-        navigate("/allfeedbacks/" + userId)
+        navigate("/allfeedbacks/" + userId);
       })
       .catch((err) => console.log(err));
   };
@@ -112,22 +110,28 @@ const FeedbackForm = ({userId}: FormUserId) => {
     } else if (userRole === "employer") {
       return (
         <>
-          <TextField
-            label="Nome da Empresa"
-            name="company"
-            required
-            fullWidth
-            disabled
-            value={revieweeName}
-          />
+          {label == "dashboard" ? (
+            ""
+          ) : (
+            <>
+              <TextField
+                label="Nome da Empresa"
+                name="company"
+                required
+                fullWidth
+                disabled
+                value={revieweeName}
+              />
 
-          <Button
-            component={Link}
-            to={`/availableusers/${userId}`}
-            variant="contained"
-          >
-            Escolha a Empresa
-          </Button>
+              <Button
+                component={Link}
+                to={`/availableusers/${userId}`}
+                variant="contained"
+              >
+                Escolha a Empresa
+              </Button>
+            </>
+          )}
         </>
       );
     }
@@ -145,15 +149,42 @@ const FeedbackForm = ({userId}: FormUserId) => {
           : "nao tem valor"}
 
         <Box>
-          <Typography component="legend">Nota</Typography>
-          <Rating
-            onChange={(_, newHover) => {
-              setRating(newHover);
-            }}
-            name="rating"
-            precision={0.5}
-            size="large"
-          />
+          {label == "dashboard" ? (
+            <>
+              <Divider sx={{ mb: "2%" }} />
+              <Typography sx={{ textAlign: "center" }} component="legend">
+                Nota
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Rating
+                  onChange={(_, newHover) => {
+                    setRating(newHover);
+                  }}
+                  name="rating"
+                  precision={0.5}
+                  size="large"
+                />
+              </Box>
+            </>
+          ) : (
+            <>
+              <Typography component="legend">Nota</Typography>
+              <Rating
+                onChange={(_, newHover) => {
+                  setRating(newHover);
+                }}
+                name="rating"
+                precision={0.5}
+                size="large"
+              />
+            </>
+          )}
         </Box>
 
         <TextField

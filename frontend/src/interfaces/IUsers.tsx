@@ -12,18 +12,7 @@ export interface IUsers {
     objective?: string;
 }
 
-export interface ProfileFormHandles {
-  getName: () => string;
-  getEmail: () => string;
-  getAvatar: () => string;
-  getPhone: () => string;
-  getAddress: () => string;
-}
-
-export interface ProfileFormProps {
-  userName?: string;
-  userEmail?: string;
-  userAvatar?: string;
-  userPhone?: string;
-  userAddress?: string;
+export interface IFeedbackForm {
+  userId?: string
+  label?: string
 }
