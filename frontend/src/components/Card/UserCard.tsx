@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { ReviewContext } from "../../context/Review/ReviewContext";
 
 const UserCard = ({ name, logo, userId, revieweeId }: IUserCard) => {
-  const { setRevieweeName, setRevieweeId } = useContext(ReviewContext);
+  const { setRevieweeName, setRevieweeId, setRevieweeAvatar } = useContext(ReviewContext);
 
   return (
     <Card
@@ -36,6 +36,7 @@ const UserCard = ({ name, logo, userId, revieweeId }: IUserCard) => {
             onClick={() => {
               setRevieweeName(name);
               setRevieweeId(revieweeId);
+              setRevieweeAvatar(logo);
             }}
             to={"/feedback/" + userId}
           >

@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/User/UserContext";
 import type { IUsers } from "../../interfaces/IUsers";
 import ProfileCard from "../../components/Card/ProfileCard";
-import Dialog from "../../components/Dialog/Dialog"; // importa seu Dialog corrigido
+import Dialog from "../../components/Dialog/Dialog";
 
 const Profile = () => {
   const navigate = useNavigate();

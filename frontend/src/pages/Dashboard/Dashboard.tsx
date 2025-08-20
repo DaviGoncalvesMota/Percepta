@@ -21,7 +21,7 @@ import {
 } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import type { IFeedbackCard } from "../../interfaces/ICard";
+import type { IFeedback } from "../../interfaces/IFeedback";
 import { UserContext } from "../../context/User/UserContext";
 import axios from "axios";
 import { baseURL } from "../../baseURL";
@@ -39,12 +39,8 @@ const Dashboard = () => {
   }
 
   const { userId } = useParams();
-  const [revieweeFeedbacks, setRevieweeFeedbacks] = useState<IFeedbackCard[]>(
-    []
-  );
-  const [reviewerFeedbacks, setReviewerFeedbacks] = useState<IFeedbackCard[]>(
-    []
-  );
+  const [revieweeFeedbacks, setRevieweeFeedbacks] = useState<IFeedback[]>([]);
+  const [reviewerFeedbacks, setReviewerFeedbacks] = useState<IFeedback[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -68,6 +64,16 @@ const Dashboard = () => {
 
   const handleDeleteChip = (category: string) => {
     setSelectedCategories((prev) => prev.filter((c) => c !== category));
+  };
+
+  const handleDeleteFeedback = (id: string) => {
+    try {
+      axios.delete(`${baseURL}/feedbacks/${id}`).then(() => {
+        window.location.reload();
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const categories =
@@ -235,13 +241,14 @@ const Dashboard = () => {
                         label="dashboard"
                         userId={userId}
                         onSubmit={(updatedUser) => updatedUser}
+                        feedbackId={feedback.id}
                       />
                     )
                   }
                 >
                   <Edit />
                 </IconButton>
-                <IconButton>
+                <IconButton onClick={() => handleDeleteFeedback(feedback.id)}>
                   <Delete />
                 </IconButton>
               </Box>
@@ -251,10 +258,34 @@ const Dashboard = () => {
           </>
         ))
       ) : (
-        <Typography>
-          Você ainda não avaliou ninguém, <br />
-          Avalie clicando <Link to={`/feedback/${userId}`}> aqui </Link>
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+            p: 4,
+            borderRadius: 3,  
+          }}
+        >
+          <Typography variant="h6" gutterBottom>
+            Você ainda não avaliou ninguém
+          </Typography>
+
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            Comece a compartilhar suas opiniões e ajude outras pessoas!
+          </Typography>
+
+          <Button
+            component={Link}
+            to={`/feedback/${userId}`}
+            variant="contained"
+            sx={{ mt: 2 }}
+          >
+            Avaliar Agora
+          </Button>
+        </Box>
       )}
     </>
   );

@@ -1,21 +1,3 @@
-export interface IFeedbackCard {
-  id: string;
-  rating: number;
-  comment: string;
-  positivePoint: string;
-  negativePoint: string;
-  category: string;
-  date: string;
-  reviewerId: string;
-  revieweeId: string;
-  reviewerRole: string;
-  revieweeRole: string;
-  reviewerName: string;
-  revieweeName: string;
-  userId?: string;
-  revieweeAvatar?: string;
-}
-
 export interface IUserCard {
   name: string;
   logo: string;

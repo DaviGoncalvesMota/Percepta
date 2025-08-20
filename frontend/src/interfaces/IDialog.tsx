@@ -5,4 +5,11 @@ export interface IDialogProps {
   onClose: () => void;
   onSubmit: (updatedUser: IUsers) => void;
   label: string
+  feedbackId?: string
 }
+
+export interface IDialogForm {
+  onClose: (updatedUser: IUsers) => void
+  userId?: string
+}
+

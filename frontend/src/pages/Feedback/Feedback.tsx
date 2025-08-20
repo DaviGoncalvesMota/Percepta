@@ -33,8 +33,8 @@ const Feedback = () => {
       <Typography align="center" variant="body1" gutterBottom>
         Sua opinião é muito importante!
       </Typography>
-
-      {userId && <FeedbackForm userId={userId} />}
+ 
+      {userId && <FeedbackForm onClose={() => {}} label="feedback" userId={userId} />}
     </Box>
   );
 };

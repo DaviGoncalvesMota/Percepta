@@ -12,7 +12,3 @@ export interface IUsers {
     objective?: string;
 }
 
-export interface IFeedbackForm {
-  userId?: string
-  label?: string
-}

@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/User/UserContext";
 import axios from "axios";
 import { baseURL } from "../../baseURL";
-import type { IDialogForm } from "../../interfaces/IForms";
+import type { IDialogForm } from "../../interfaces/IDialog";
 import type { IUsers } from "../../interfaces/IUsers";
 
 const ProfileForm = ({ userId, onClose }: IDialogForm) => {
