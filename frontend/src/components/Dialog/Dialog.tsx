@@ -5,9 +5,11 @@ import {
   FormControl,
   Stack,
 } from "@mui/material";
-import ProfileForm from "../Forms/ProfileForm";
+import UserProfileForm from "../Forms/User/UserProfileForm";
 import type { IDialogProps } from "../../interfaces/IDialog";
-import FeedbackForm from "../Forms/FeedbackForm";
+import FeedbackForm from "../Forms/Feedback/FeedbackForm";
+import { useContext } from "react";
+import { ReviewContext } from "../../context/Review/ReviewContext";
 
 const Dialog = ({
   onClose,
@@ -16,11 +18,16 @@ const Dialog = ({
   label,
   feedbackId,
 }: IDialogProps) => {
+  const { setRevieweeName } = useContext(ReviewContext);
+
   return (
     <DialogComponent
       open
       fullWidth
-      onClose={onClose}
+      onClose={() => {
+        onClose() 
+        setRevieweeName("");
+      }}
       slotProps={{
         paper: {
           component: "form",
@@ -38,7 +45,7 @@ const Dialog = ({
         <FormControl fullWidth variant="standard">
           <Stack spacing={2}>
             {label == "profile" && (
-              <ProfileForm
+              <UserProfileForm
                 userId={userId}
                 onClose={(updatedUser) => {
                   onSubmit(updatedUser);

@@ -9,16 +9,16 @@ import {
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import { ReviewContext } from "../../context/Review/ReviewContext";
+import { ReviewContext } from "../../../context/Review/ReviewContext";
 import axios from "axios";
-import { baseURL } from "../../baseURL";
-import { UserContext } from "../../context/User/UserContext";
+import { baseURL } from "../../../baseURL";
+import { UserContext } from "../../../context/User/UserContext";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { companyCategories, employeeCategories } from "../../data/categories";
-import type { IFeedbackForm } from "../../interfaces/IFeedback";
-import type { IFeedback } from "../../interfaces/IFeedback";
+import { companyCategories, employeeCategories } from "../../../data/categories";
+import type { IFeedbackForm } from "../../../interfaces/IFeedback";
+import type { IFeedback } from "../../../interfaces/IFeedback";
 
 const FeedbackForm = ({
   userId,
@@ -121,8 +121,8 @@ const FeedbackForm = ({
       axios
         .post(baseURL + "/feedbacks", feedback)
         .then(() => {
-          navigate("/allfeedbacks/" + userId);
           setRevieweeName("")
+          navigate("/allfeedbacks/" + userId);
         })
         .catch((err) => console.log(err));
     }
@@ -132,6 +132,7 @@ const FeedbackForm = ({
         .put(baseURL + "/feedbacks/" + feedbackId, feedback)
         .then((response) => {
           const updatedFeedback: IFeedback = response.data[0];
+          setRevieweeName("")
           onClose(updatedFeedback);
         })
         .catch((err) => console.log(err))

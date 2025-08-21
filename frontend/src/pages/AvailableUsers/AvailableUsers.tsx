@@ -5,7 +5,7 @@ import type { IUsers } from "../../interfaces/IUsers";
 import { Box } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../../context/User/UserContext";
-import UserCard from "../../components/Card/UserCard";
+import UserCard from "../../components/Card/User/UserCard";
 
 const AvailableUsers = () => {
   const navigate = useNavigate();

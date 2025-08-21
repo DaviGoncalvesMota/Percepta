@@ -13,7 +13,7 @@ import { Category, CalendarToday } from "@mui/icons-material";
 import axios from "axios";
 import { baseURL } from "../../baseURL";
 import { useContext, useEffect, useState } from "react";
-import type { IFeedbackCard } from "../../interfaces/ICard";
+import type { IFeedback } from "../../interfaces/IFeedback";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../../context/User/UserContext";
 
@@ -26,7 +26,7 @@ const Details = () => {
     navigate("/login");
   }
 
-  const [feedback, setFeedback] = useState<IFeedbackCard | null>(null);
+  const [feedback, setFeedback] = useState<IFeedback | null>(null);
   const id = useParams().id;
 
   useEffect(() => {

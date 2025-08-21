@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/User/UserContext";
 import type { IUsers } from "../../interfaces/IUsers";
-import ProfileCard from "../../components/Card/ProfileCard";
+import UserProfileCard from "../../components/Card/User/UserProfileCard";
 import Dialog from "../../components/Dialog/Dialog";
 
 const Profile = () => {
@@ -59,7 +59,7 @@ const Profile = () => {
         }}
       >
         {user && (
-          <ProfileCard
+          <UserProfileCard
             id={user.id}
             name={user.name}
             email={user.email}

@@ -41,11 +41,46 @@ const Dashboard = () => {
   const { userId } = useParams();
   const [revieweeFeedbacks, setRevieweeFeedbacks] = useState<IFeedback[]>([]);
   const [reviewerFeedbacks, setReviewerFeedbacks] = useState<IFeedback[]>([]);
+  const [allReviewerFeedbacks, setAllReviewerFeedbacks] = useState<IFeedback[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [dialog, setDialog] = useState<React.ReactNode>();
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    const revieweeFeedbacks = async () => {
+      axios
+        .get(baseURL + "/feedbacks?revieweeId=" + userId)
+        .then((response) => {
+          setRevieweeFeedbacks(response.data);
+        });
+    };
+
+    const reviewerFeedbacks = async () => {
+      axios
+        .get(baseURL + "/feedbacks?reviewerId=" + userId)
+        .then((response) => {
+          setReviewerFeedbacks(response.data);
+          setAllReviewerFeedbacks(response.data);
+        });
+    };
+
+    revieweeFeedbacks();
+    reviewerFeedbacks();
+  }, [userId]);
+  
+  useEffect(() => {
+    if (selectedCategories.length > 0) {
+      setReviewerFeedbacks(
+        allReviewerFeedbacks.filter((feedback) =>
+          selectedCategories.includes(feedback.category)
+        )
+      );
+    } else {
+      setReviewerFeedbacks(allReviewerFeedbacks);
+    }
+  }, [selectedCategories, allReviewerFeedbacks]);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
@@ -55,10 +90,10 @@ const Dashboard = () => {
     setAnchorEl(null);
   };
 
-  const handleSelectedCategory = (category: string) => {
-    if (!selectedCategories.includes(category)) {
-      setSelectedCategories((prev) => [...prev, category]);
-    }
+  const toggleCategory = (category: string) => {
+    setSelectedCategories((prev) =>
+      prev.includes(category) ? prev : [...prev, category]
+    );
     handleClose();
   };
 
@@ -76,29 +111,7 @@ const Dashboard = () => {
     }
   };
 
-  const categories =
-    userRole === "company" ? companyCategories : employeeCategories;
-
-  useEffect(() => {
-    const revieweeFeedbacks = async () => {
-      axios
-        .get(baseURL + "/feedbacks?revieweeId=" + userId)
-        .then((response) => {
-          setRevieweeFeedbacks(response.data);
-        });
-    };
-
-    const reviewerFeedbacks = async () => {
-      axios
-        .get(baseURL + "/feedbacks?reviewerId=" + userId)
-        .then((response) => {
-          setReviewerFeedbacks(response.data);
-        });
-    };
-
-    revieweeFeedbacks();
-    reviewerFeedbacks();
-  }, [userId]);
+  const categories = userRole === "company" ? employeeCategories : companyCategories;
 
   return (
     <>
@@ -130,9 +143,9 @@ const Dashboard = () => {
           mb: 5,
         }}
       >
-        {selectedCategories.map((category) => (
+        {selectedCategories.map((category, index) => (
           <Chip
-            key={category}
+            key={index}
             label={category}
             onDelete={() => handleDeleteChip(category)}
           />
@@ -153,13 +166,13 @@ const Dashboard = () => {
             },
           }}
         >
-          {categories.map((option, index) => (
+          {categories.map((category, index) => (
             <MenuItem
               key={index}
-              value={option}
-              onClick={() => handleSelectedCategory(option)}
+              value={category}
+              onClick={() => toggleCategory(category)}
             >
-              {option}
+              {category}
             </MenuItem>
           ))}
         </Menu>
@@ -200,63 +213,66 @@ const Dashboard = () => {
       </Box>
 
       {reviewerFeedbacks.length > 0 ? (
-        reviewerFeedbacks.map((feedback, index) => (
-          <>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                pb: "1%",
-              }}
-              key={index}
-            >
-              {/* Esquerda */}
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <Avatar src={feedback.revieweeAvatar} />
-                <Typography>
-                  <strong>{feedback.revieweeName}</strong>
-                </Typography>
+        reviewerFeedbacks
+          .filter((f) =>
+            f.comment?.toLowerCase().includes(searchText.toLowerCase())
+          )
+          .map((feedback, index) => (
+            <React.Fragment key={index}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  pb: "1%",
+                }}
+              >
+                {/* Esquerda */}
+                <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                  <Avatar src={feedback.revieweeAvatar} />
+                  <Typography>
+                    <strong>{feedback.revieweeName}</strong>
+                  </Typography>
+                </Box>
+
+                <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                  <strong>Nota:</strong>{" "}
+                  <Rating
+                    value={feedback.rating}
+                    precision={0.5}
+                    readOnly
+                    size="medium"
+                  />
+                </Box>
+
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  <Link to={`/details/${feedback.id}/${userId}`}>
+                    <Button sx={{ mt: 0.5 }}> Detalhes </Button>
+                  </Link>
+                  <IconButton
+                    onClick={() =>
+                      setDialog(
+                        <Dialog
+                          onClose={() => setDialog(false)}
+                          label="dashboard"
+                          userId={userId}
+                          onSubmit={(updatedUser) => updatedUser}
+                          feedbackId={feedback.id}
+                        />
+                      )
+                    }
+                  >
+                    <Edit />
+                  </IconButton>
+                  <IconButton onClick={() => handleDeleteFeedback(feedback.id)}>
+                    <Delete />
+                  </IconButton>
+                </Box>
               </Box>
 
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <strong>Nota:</strong>{" "}
-                <Rating
-                  value={feedback.rating}
-                  precision={0.5}
-                  readOnly
-                  size="medium"
-                />
-              </Box>
-
-              <Box sx={{ display: "flex", gap: 2 }}>
-                <Link to={`/details/${feedback.id}/${userId}`}>
-                  <Button sx={{ mt: 0.5 }}> Detalhes </Button>
-                </Link>
-                <IconButton
-                  onClick={() =>
-                    setDialog(
-                      <Dialog
-                        onClose={() => setDialog(false)}
-                        label="dashboard"
-                        userId={userId}
-                        onSubmit={(updatedUser) => updatedUser}
-                        feedbackId={feedback.id}
-                      />
-                    )
-                  }
-                >
-                  <Edit />
-                </IconButton>
-                <IconButton onClick={() => handleDeleteFeedback(feedback.id)}>
-                  <Delete />
-                </IconButton>
-              </Box>
-            </Box>
-
-            <Divider sx={{ mb: 3 }} />
-          </>
-        ))
+              <Divider sx={{ mb: 3 }} />
+            </React.Fragment>
+          ))
       ) : (
         <Box
           sx={{
@@ -266,7 +282,7 @@ const Dashboard = () => {
             justifyContent: "center",
             textAlign: "center",
             p: 4,
-            borderRadius: 3,  
+            borderRadius: 3,
           }}
         >
           <Typography variant="h6" gutterBottom>

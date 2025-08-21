@@ -1,12 +1,12 @@
 import { Box, Button, TextField } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../context/User/UserContext";
+import { UserContext } from "../../../context/User/UserContext";
 import axios from "axios";
-import { baseURL } from "../../baseURL";
-import type { IDialogForm } from "../../interfaces/IDialog";
-import type { IUsers } from "../../interfaces/IUsers";
+import { baseURL } from "../../../baseURL";
+import type { IDialogForm } from "../../../interfaces/IDialog";
+import type { IUsers } from "../../../interfaces/IUsers";
 
-const ProfileForm = ({ userId, onClose }: IDialogForm) => {
+const UserProfileForm = ({ userId, onClose }: IDialogForm) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [avatar, setAvatar] = useState("");
@@ -102,4 +102,4 @@ const ProfileForm = ({ userId, onClose }: IDialogForm) => {
   );
 };
 
-export default ProfileForm;
+export default UserProfileForm;

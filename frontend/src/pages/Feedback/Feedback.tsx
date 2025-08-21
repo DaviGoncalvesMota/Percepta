@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import FeedbackForm from "../../components/Forms/FeedbackForm";
+import FeedbackForm from "../../components/Forms/Feedback/FeedbackForm";
 import { useNavigate, useParams } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../../context/User/UserContext";

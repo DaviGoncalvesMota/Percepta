@@ -2,9 +2,9 @@ import { Box, Typography } from "@mui/material";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { baseURL } from "../../baseURL";
-import type { IFeedbackCard } from "../../interfaces/ICard";
+import type { IFeedback } from "../../interfaces/IFeedback";
 import { useNavigate, useParams } from "react-router-dom";
-import FeedbackCard from "../../components/Card/FeedbackCard";
+import FeedbackCard from "../../components/Card/Feedback/FeedbackCard";
 import { UserContext } from "../../context/User/UserContext";
 
 const AllFeedbacks = () => {
@@ -16,7 +16,7 @@ const AllFeedbacks = () => {
     navigate("/login");
   }
 
-  const [feedbacks, setFeedbacks] = useState<IFeedbackCard[]>([]);
+  const [feedbacks, setFeedbacks] = useState<IFeedback[]>([]);
 
   const { userId } = useParams();
 
@@ -59,7 +59,7 @@ const AllFeedbacks = () => {
           {feedbacks.length > 0 ? (
             feedbacks
               .filter((e) => e.revieweeRole == "company")
-              .map((feedback: IFeedbackCard, index) => {
+              .map((feedback: IFeedback, index) => {
                 return (
                   <FeedbackCard
                     id={feedback.id}

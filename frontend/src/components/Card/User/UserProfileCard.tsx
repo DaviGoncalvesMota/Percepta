@@ -9,10 +9,10 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import Dialog from "../Dialog/Dialog";
-import type { IProfileCard } from "../../interfaces/ICard";
+import Dialog from "../../Dialog/Dialog";
+import type { IUserProfileCard } from "../../../interfaces/IUsers";
 
-const ProfileCard = ({
+const UserProfileCard = ({
   id,
   name,
   email,
@@ -20,7 +20,7 @@ const ProfileCard = ({
   phone,
   address,
   setDialog,
-}: IProfileCard) => {
+}: IUserProfileCard) => {
   return (
     <Card
       key={id}
@@ -78,7 +78,14 @@ const ProfileCard = ({
             >
               <Button
                 onClick={() =>
-                  setDialog(<Dialog onClose={() => setDialog(false)} userId={id} />)
+                  setDialog(
+                    <Dialog
+                      onSubmit={(updatedUser) => updatedUser}
+                      label="profile"
+                      onClose={() => setDialog(false)}
+                      userId={id}
+                    />
+                  )
                 }
                 variant="outlined"
                 color="warning"
@@ -89,7 +96,7 @@ const ProfileCard = ({
               <Button
                 onClick={() => {
                   localStorage.removeItem("user");
-                  window.location.reload()
+                  window.location.reload();
                 }}
                 variant="outlined"
                 color="error"
@@ -105,4 +112,4 @@ const ProfileCard = ({
   );
 };
 
-export default ProfileCard;
+export default UserProfileCard;

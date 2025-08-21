@@ -9,7 +9,7 @@ import {
   Stack,
 } from "@mui/material";
 import { Category, CalendarToday } from "@mui/icons-material";
-import type { IFeedbackCard } from "../../interfaces/ICard";
+import type { IFeedback } from "../../../interfaces/IFeedback";
 import { Link } from "react-router-dom";
 
 const FeedbackCard = ({
@@ -21,7 +21,7 @@ const FeedbackCard = ({
   reviewerName,
   revieweeName,
   userId,
-}: IFeedbackCard) => {
+}: IFeedback) => {
   return (
     <CardComponent
       sx={{
@@ -60,11 +60,11 @@ const FeedbackCard = ({
               overflow: "hidden",
               textOverflow: "ellipsis",
               display: "-webkit-box",
-              WebkitLineClamp: 2, // limite de linhas
+              WebkitLineClamp: 2,
               WebkitBoxOrient: "vertical",
             }}
           >
-             "{comment.slice(0, 35)}{comment.length > 35 ? "..." : ""}"
+             "{comment.slice(0, 35)}{comment.length > 35 ? "..." : ""}" {/* Utilizando Slice */}
           </Typography>
 
           <Box display="flex" alignItems="center" gap={1} mt="auto">
