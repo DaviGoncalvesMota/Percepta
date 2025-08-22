@@ -10,15 +10,14 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { ReviewContext } from "../../../context/Review/ReviewContext";
-import axios from "axios";
-import { baseURL } from "../../../baseURL";
 import { UserContext } from "../../../context/User/UserContext";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { companyCategories, employeeCategories } from "../../../data/categories";
 import type { IFeedbackForm } from "../../../interfaces/IFeedback";
-import type { IFeedback } from "../../../interfaces/IFeedback";
+import { useFetchFeedbacks } from "../../../hooks/useFetchFeedbacks";
+import { useFetchUsers } from "../../../hooks/useFetchUsers";
 
 const FeedbackForm = ({
   userId,
@@ -43,62 +42,35 @@ const FeedbackForm = ({
   const [category, setCategory] = useState<string>("");
   const [comment, setComment] = useState<string>("");
   const [currentUser, setCurrentUser] = useState<string>("");
-  const [date, setDate] = useState<Dayjs>(dayjs());
+  const [date] = useState<Dayjs>(dayjs());
+
+  const {getFeedbackById, feedback} = useFetchFeedbacks()
+  const {getUserById, user} = useFetchUsers()
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const endpoint = userRole === "employer" ? "/employers" : "/companies";
-        const response = await axios.get(`${baseURL}${endpoint}?id=${userId}`);
+    const fetchData = async () => {
+      await getUserById()
+      await getFeedbackById()
+    }
+    fetchData()
 
-        const name = response.data[0]?.name;
+  }, [getUserById, getFeedbackById])
 
-        if (name) {
-          setCurrentUser(name);
-        } else {
-          console.warn("Usuário não encontrado.");
-        }
-      } catch (err) {
-        console.error("Erro ao buscar usuário:", err);
-      }
-    };
-
-    const fetchFeedback = async () => {
-      try {
-        const response = await axios.get(
-          `${baseURL}/feedbacks?id=${feedbackId}`
-        );
-
-        setRating(response.data[0].rating);
-        setPositivePoint(response.data[0].positivePoint);
-        setNegativePoint(response.data[0].negativePoint);
-        setCategory(response.data[0].category);
-        setComment(response.data[0].comment);
-        setDate(dayjs(response.data[0].date));
-        setRevieweeName(response.data[0].revieweeName);
-        setRevieweeId(response.data[0].revieweeId);
-        setRevieweeAvatar(response.data[0].revieweeAvatar);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    if (userId && userRole) {
-      fetchUser();
+  useEffect(() => {
+    if(user) {
+      setCurrentUser(user[0].name)
     }
 
-    if (userId && userRole && label === "dashboard") {
-      fetchFeedback();
+    if(feedback) {
+      setRating(feedback[0].rating)
+      setPositivePoint(feedback[0].positivePoint)
+      setNegativePoint(feedback[0].negativePoint)
+      setCategory(feedback[0].category)
+      setComment(feedback[0].comment)
+      setRevieweeAvatar(feedback[0].revieweeAvatar)
+      setRevieweeId(feedback[0].revieweeId)
     }
-  }, [
-    userId,
-    userRole,
-    label,
-    feedbackId,
-    setRevieweeName,
-    setRevieweeId,
-    setRevieweeAvatar,
-  ]);
+  }, [user, feedback, revieweeAvatar, setRevieweeAvatar, setRevieweeId])
 
   const handleSubmit = () => {
     const feedback = {
@@ -117,27 +89,27 @@ const FeedbackForm = ({
       revieweeAvatar,
     };
 
-    if (label === "feedback") {
-      axios
-        .post(baseURL + "/feedbacks", feedback)
-        .then(() => {
-          setRevieweeName("")
-          navigate("/allfeedbacks/" + userId);
-        })
-        .catch((err) => console.log(err));
-    }
+  //   if (label === "feedback") {
+  //     axios
+  //       .post(baseURL + "/feedbacks", feedback)
+  //       .then(() => {
+  //         setRevieweeName("")
+  //         navigate("/allfeedbacks/" + userId);
+  //       })
+  //       .catch((err) => console.log(err));
+  //   }
 
-    if (label === "dashboard") {
-      axios
-        .put(baseURL + "/feedbacks/" + feedbackId, feedback)
-        .then((response) => {
-          const updatedFeedback: IFeedback = response.data[0];
-          setRevieweeName("")
-          onClose(updatedFeedback);
-        })
-        .catch((err) => console.log(err))
-    }
-  };
+  //   if (label === "dashboard") {
+  //     axios
+  //       .put(baseURL + "/feedbacks/" + feedbackId, feedback)
+  //       .then((response) => {
+  //         const updatedFeedback: IFeedback = response.data[0];
+  //         setRevieweeName("")
+  //         onClose(updatedFeedback);
+  //       })
+  //       .catch((err) => console.log(err))
+  //   }
+  }
 
   const verifyForm = () => {
     if (userRole === "company") {
@@ -305,3 +277,59 @@ const FeedbackForm = ({
 };
 
 export default FeedbackForm;
+
+
+// useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const endpoint = userRole === "employer" ? "/employers" : "/companies";
+  //       const response = await axios.get(`${baseURL}${endpoint}?id=${userId}`);
+
+  //       const name = response.data[0]?.name;
+
+  //       if (name) {
+  //         setCurrentUser(name);
+  //       } else {
+  //         console.warn("Usuário não encontrado.");
+  //       }
+  //     } catch (err) {
+  //       console.error("Erro ao buscar usuário:", err);
+  //     }
+  //   };
+
+  //   const fetchFeedback = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `${baseURL}/feedbacks?id=${feedbackId}`
+  //       );
+
+  //       setRating(response.data[0].rating);
+  //       setPositivePoint(response.data[0].positivePoint);
+  //       setNegativePoint(response.data[0].negativePoint);
+  //       setCategory(response.data[0].category);
+  //       setComment(response.data[0].comment);
+  //       setDate(dayjs(response.data[0].date));
+  //       setRevieweeName(response.data[0].revieweeName);
+  //       setRevieweeId(response.data[0].revieweeId);
+  //       setRevieweeAvatar(response.data[0].revieweeAvatar);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+
+  //   if (userId && userRole) {
+  //     fetchUser();
+  //   }
+
+  //   if (userId && userRole && label === "dashboard") {
+  //     fetchFeedback();
+  //   }
+  // }, [
+  //   userId,
+  //   userRole,
+  //   label,
+  //   feedbackId,
+  //   setRevieweeName,
+  //   setRevieweeId,
+  //   setRevieweeAvatar,
+  // ]);

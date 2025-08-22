@@ -8,53 +8,47 @@ import {
   Stack,
   IconButton,
 } from "@mui/material";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-import { baseURL } from "../../baseURL";
-import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
+import { useContext, useState, type MouseEvent } from "react";
 import { ThemeContext } from "../../context/Theme/ThemeContext";
 import { Brightness5, DarkMode } from "@mui/icons-material";
 import { UserContext } from "../../context/User/UserContext";
+import { useAuthentication } from "../../hooks/useAuthentication";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const { userRole, setUserRole } = useContext(UserContext);
   const { themeMode, setThemeMode } = useContext(ThemeContext);
+  const { authUser, loading, error } = useAuthentication();
 
-  const navigate = useNavigate();
+  if (loading) {
+    return (
+      <Box sx={{ padding: 2 }}>
+        <Typography variant="h4" align="center">
+          Carregando os detalhes do feedback...
+        </Typography>
+      </Box>
+    );
+  }
 
-  const authUser = () => {
-    if (!email || !password) {
-      alert("Por favor, preencha todos os campos.");
-      return;
-    }
-
-    if (!userRole) {
-      alert("Por favor, selecione o tipo de usuário.");
-      return;
-    }
-
-    const endpoint = userRole === "employer" ? "employers" : "companies";
-
-    axios
-      .get(`${baseURL}/${endpoint}?email=${email}&password=${password}`)
-      .then((response) => {
-        if (response.data.length > 0) {
-          localStorage.setItem("user", JSON.parse(response.data[0].id));
-          navigate("/");
-        } else {
-          alert("Usuário ou senha inválidos");
-        }
-      })
-      .catch((error) => {
-        console.error("Erro ao autenticar:", error);
-        alert("Erro ao autenticar. Tente novamente.");
-      });
-  };
+  if (error) return <p>{error}</p>;
 
   const handleTheme = () => {
     setThemeMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+  };
+
+  const handleSubmit = async (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+
+    const user = {
+      email,
+      password
+    }
+
+    const res = await authUser(user)
+
+    console.log(res)
   };
 
   return (
@@ -74,7 +68,6 @@ const Login = () => {
         </IconButton>
       </Box>
 
-      {/* Card de login */}
       <Box
         display="flex"
         justifyContent="center"
@@ -133,7 +126,7 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
               <Button
-                onClick={authUser}
+                onClick={handleSubmit}
                 variant="contained"
                 size="large"
                 color="primary"

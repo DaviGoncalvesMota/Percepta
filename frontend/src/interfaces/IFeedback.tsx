@@ -13,7 +13,7 @@ export interface IFeedback {
   reviewerName: string;
   revieweeName: string;
   userId?: string;
-  revieweeAvatar?: string;
+  revieweeAvatar: string;
 }
 
 export interface IFeedbackForm {

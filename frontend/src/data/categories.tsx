@@ -1,3 +1,5 @@
+// PASSAR ISSO PRA UM JSON 
+
 export const companyCategories = [
   "Atendimento ao Cliente",
   "Qualidade dos Produtos/Serviços",

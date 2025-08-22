@@ -1,11 +1,9 @@
-import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { baseURL } from "../../baseURL";
-import type { IUsers } from "../../interfaces/IUsers";
-import { Box } from "@mui/material";
+import { useContext, useEffect } from "react";
+import { Box, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../../context/User/UserContext";
 import UserCard from "../../components/Card/User/UserCard";
+import { useFetchUsers } from "../../hooks/useFetchUsers";
 
 const AvailableUsers = () => {
   const navigate = useNavigate();
@@ -15,24 +13,28 @@ const AvailableUsers = () => {
     navigate("/login");
   }
 
-  const [companies, setCompanies] = useState<IUsers[]>([]);
-  const [employers, setEmployers] = useState<IUsers[]>([]);
-
   const { userId } = useParams();
 
+  const { getUsers, users, loading, error } = useFetchUsers();
+
   useEffect(() => {
-    if (userRole == "employer") {
-      axios
-        .get(baseURL + "/companies")
-        .then((res) => setCompanies(res.data))
-        .catch((err) => console.log(err));
-    } else {
-      axios
-        .get(baseURL + "/employers")
-        .then((res) => setEmployers(res.data))
-        .catch((err) => console.log(err));
+    const fetchData = async () => {
+      await getUsers()
     }
-  }, [userRole]);
+    fetchData()
+  }, [getUsers])
+
+   if (loading) {
+    return (
+      <Box sx={{ padding: 2 }}>
+        <Typography variant="h4" align="center">
+          Carregando...
+        </Typography>
+      </Box>
+    );
+  }
+
+  if (error) return <p>{error}</p>; 
 
   return (
     <>
@@ -45,25 +47,16 @@ const AvailableUsers = () => {
           flexWrap: "wrap",
         }}
       >
-        {companies.length > 0
-          ? companies.map((company, index) => (
-              <UserCard
-                key={index}
-                name={company.name}
-                logo={company.avatar}
-                userId={userId}
-                revieweeId={company.id}
-              />
-            ))
-          : employers.map((employer, index) => (
-              <UserCard
-                key={index}
-                name={employer.name}
-                logo={employer.avatar}
-                userId={userId}
-                revieweeId={employer.id}
-              />
-            ))}
+        {users.length > 0 &&
+          users.map((company, index) => (
+            <UserCard
+              key={index}
+              name={company.name}
+              logo={company.avatar}
+              userId={userId}
+              revieweeId={company.id}
+            />
+          ))}
       </Box>
     </>
   );

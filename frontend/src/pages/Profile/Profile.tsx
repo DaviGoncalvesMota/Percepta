@@ -1,12 +1,10 @@
 import { Box } from "@mui/material";
-import axios from "axios";
-import { baseURL } from "../../baseURL";
 import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/User/UserContext";
-import type { IUsers } from "../../interfaces/IUsers";
 import UserProfileCard from "../../components/Card/User/UserProfileCard";
 import Dialog from "../../components/Dialog/Dialog";
+import { useFetchUsers } from "../../hooks/useFetchUsers";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -18,32 +16,23 @@ const Profile = () => {
   }
 
   const { userId } = useParams();
-  const [user, setUser] = useState<IUsers | null>(null);
   const [dialog, setDialog] = useState(false);
 
-  useEffect(() => {
-    const endpoint =
-      userRole === "employer" ? "/employers?id=" : "/companies?id=";
+  const { getUserById, user } = useFetchUsers(userId)
 
-    axios
-      .get(baseURL + endpoint + userId)
-      .then((response) => {
-        if (response.data && response.data[0]) {
-          setUser(response.data[0]);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching user data:", error);
-      });
-  }, [userRole, userId]);
+  useEffect(() => {
+    const fetchData = async () => {
+      await getUserById()
+    }
+    fetchData()
+  }, [userRole, userId, getUserById]);
 
   return (
     <>
       {dialog && user && (
         <Dialog
-          userId={user.id}
+          userId={user[0].id}
           onClose={() => setDialog(false)}
-          onSubmit={(updatedUser) => setUser(updatedUser)}
           label="profile"
         />
       )}
@@ -60,12 +49,12 @@ const Profile = () => {
       >
         {user && (
           <UserProfileCard
-            id={user.id}
-            name={user.name}
-            email={user.email}
-            avatar={user.avatar}
-            phone={user.phone}
-            address={user.address}
+            id={user[0].id}
+            name={user[0].name}
+            email={user[0].email}
+            avatar={user[0].avatar}
+            phone={user[0].phone}
+            address={user[0].address}
             setDialog={() => setDialog(true)}
           />
         )}

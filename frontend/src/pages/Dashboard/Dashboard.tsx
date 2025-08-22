@@ -24,10 +24,10 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import type { IFeedback } from "../../interfaces/IFeedback";
 import { UserContext } from "../../context/User/UserContext";
 import axios from "axios";
-import { baseURL } from "../../baseURL";
 import { companyCategories, employeeCategories } from "../../data/categories";
 import React from "react";
 import Dialog from "../../components/Dialog/Dialog";
+import { useFetchFeedbacks } from "../../hooks/useFetchFeedbacks";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -39,8 +39,6 @@ const Dashboard = () => {
   }
 
   const { userId } = useParams();
-  const [revieweeFeedbacks, setRevieweeFeedbacks] = useState<IFeedback[]>([]);
-  const [reviewerFeedbacks, setReviewerFeedbacks] = useState<IFeedback[]>([]);
   const [allReviewerFeedbacks, setAllReviewerFeedbacks] = useState<IFeedback[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [searchText, setSearchText] = useState<string>("");
@@ -48,28 +46,23 @@ const Dashboard = () => {
   const [dialog, setDialog] = useState<React.ReactNode>();
   const open = Boolean(anchorEl);
 
+  const {
+    getRevieweeFeedbacks,
+    revieweeFeedbacks,
+    setRevieweeFeedbacks,
+    getReviewerFeedbacks,
+    reviewerFeedbacks,
+    setReviewerFeedbacks
+  } = useFetchFeedbacks(userId!);
+
   useEffect(() => {
-    const revieweeFeedbacks = async () => {
-      axios
-        .get(baseURL + "/feedbacks?revieweeId=" + userId)
-        .then((response) => {
-          setRevieweeFeedbacks(response.data);
-        });
+    const fetchData = async () => {
+      await getRevieweeFeedbacks();
+      await getReviewerFeedbacks();
     };
+    fetchData();
+  }, [userId, getRevieweeFeedbacks, getReviewerFeedbacks]);
 
-    const reviewerFeedbacks = async () => {
-      axios
-        .get(baseURL + "/feedbacks?reviewerId=" + userId)
-        .then((response) => {
-          setReviewerFeedbacks(response.data);
-          setAllReviewerFeedbacks(response.data);
-        });
-    };
-
-    revieweeFeedbacks();
-    reviewerFeedbacks();
-  }, [userId]);
-  
   useEffect(() => {
     if (selectedCategories.length > 0) {
       setReviewerFeedbacks(
@@ -80,7 +73,7 @@ const Dashboard = () => {
     } else {
       setReviewerFeedbacks(allReviewerFeedbacks);
     }
-  }, [selectedCategories, allReviewerFeedbacks]);
+  }, [selectedCategories, allReviewerFeedbacks, setReviewerFeedbacks]);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
@@ -101,17 +94,18 @@ const Dashboard = () => {
     setSelectedCategories((prev) => prev.filter((c) => c !== category));
   };
 
-  const handleDeleteFeedback = (id: string) => {
-    try {
-      axios.delete(`${baseURL}/feedbacks/${id}`).then(() => {
-        window.location.reload();
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const handleDeleteFeedback = (id: string) => {
+  //   try {
+  //     axios.delete(`${baseURL}/feedbacks/${id}`).then(() => {
+  //       window.location.reload();
+  //     });
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
-  const categories = userRole === "company" ? employeeCategories : companyCategories;
+  const categories =
+    userRole === "company" ? employeeCategories : companyCategories;
 
   return (
     <>
@@ -264,7 +258,7 @@ const Dashboard = () => {
                   >
                     <Edit />
                   </IconButton>
-                  <IconButton onClick={() => handleDeleteFeedback(feedback.id)}>
+                  <IconButton>
                     <Delete />
                   </IconButton>
                 </Box>
@@ -308,3 +302,6 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+
+// onClick={() => handleDeleteFeedback(feedback.id)}

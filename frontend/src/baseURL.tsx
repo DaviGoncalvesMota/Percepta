@@ -1,1 +1,0 @@
-export const baseURL: string = "http://localhost:3001"; // Adjust the URL as needed

@@ -12,7 +12,7 @@ import { Category, CalendarToday } from "@mui/icons-material";
 import type { IFeedback } from "../../../interfaces/IFeedback";
 import { Link } from "react-router-dom";
 
-const FeedbackCard = ({
+const FeedbackSimpleCard = ({
   id,
   rating,
   category,
@@ -91,4 +91,4 @@ const FeedbackCard = ({
   );
 };
 
-export default FeedbackCard;
+export default FeedbackSimpleCard;

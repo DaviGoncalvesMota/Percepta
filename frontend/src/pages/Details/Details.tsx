@@ -1,21 +1,9 @@
-import {
-  Card as CardComponent,
-  CardContent,
-  CardActions,
-  Typography,
-  Button,
-  Box,
-  Rating,
-  Stack,
-  Divider,
-} from "@mui/material";
-import { Category, CalendarToday } from "@mui/icons-material";
-import axios from "axios";
-import { baseURL } from "../../baseURL";
-import { useContext, useEffect, useState } from "react";
-import type { IFeedback } from "../../interfaces/IFeedback";
+import { Typography, Box } from "@mui/material";
+import { useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../../context/User/UserContext";
+import { useFetchFeedbacks } from "../../hooks/useFetchFeedbacks";
+import FeedbackDetailsCard from "../../components/Card/Feedback/FeedbackDetailsCard";
 
 const Details = () => {
   const navigate = useNavigate();
@@ -26,19 +14,18 @@ const Details = () => {
     navigate("/login");
   }
 
-  const [feedback, setFeedback] = useState<IFeedback | null>(null);
-  const id = useParams().id;
+  const { id } = useParams();
+
+  const { getFeedbacks, feedbacks, loading, error } = useFetchFeedbacks(id);
 
   useEffect(() => {
-    axios
-      .get(baseURL + "/feedbacks/" + id)
-      .then((res) => {
-        setFeedback(res.data);
-      })
-      .catch((err) => console.error("Erro ao carregar detalhes:", err));
-  }, [id]);
+    const fetchData = async () => {
+      await getFeedbacks();
+    };
+    fetchData();
+  }, [getFeedbacks]);
 
-  if (!feedback) {
+  if (loading) {
     return (
       <Box sx={{ padding: 2 }}>
         <Typography variant="h4" align="center">
@@ -48,98 +35,30 @@ const Details = () => {
     );
   }
 
+  if (error) return <p>{error}</p>;
+
   return (
     <Box sx={{ padding: 2, maxWidth: 600, margin: "auto" }}>
-      <CardComponent
-        sx={{
-          borderRadius: 4,
-          boxShadow: 4,
-          bgcolor: "background.paper",
-          p: 3,
-        }}
-      >
-        <CardContent>
-          <Stack spacing={2}>
-            <Typography
-              align="center"
-              variant="h5"
-              fontWeight="bold"
-              gutterBottom
-            >
-              Avaliação para: {feedback.revieweeName}
-            </Typography>
-
-            <Typography
-              align="center"
-              variant="subtitle1"
-              color="text.secondary"
-            >
-              Por: {feedback.reviewerName}
-            </Typography>
-
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              gap={1}
-            >
-              <Rating value={feedback.rating} precision={0.5} readOnly />
-              <Typography variant="body2" color="text.secondary">
-                {feedback.rating} Estrelas
-              </Typography>
-            </Box>
-
-            <Divider />
-
-            <Typography align="center" variant="body1" fontStyle="italic">
-              "{feedback.comment}"
-            </Typography>
-
-            <Divider />
-
-            <Box>
-              <Typography variant="subtitle2" color="success.main">
-                <strong>Ponto Positivo:</strong>
-              </Typography>
-              <Typography variant="body2">{feedback.positivePoint}</Typography>
-            </Box>
-
-            <Box>
-              <Typography variant="subtitle2" color="error.main">
-                <strong>Ponto Negativo:</strong>
-              </Typography>
-              <Typography variant="body2">{feedback.negativePoint}</Typography>
-            </Box>
-
-            <Divider />
-
-            <Box display="flex" justifyContent="space-between" flexWrap="wrap">
-              <Box display="flex" alignItems="center" gap={1}>
-                <CalendarToday sx={{ fontSize: 16 }} />
-                <Typography variant="caption">
-                  {new Date(feedback.date).toLocaleDateString()}
-                </Typography>
-              </Box>
-              <Box display="flex" alignItems="center" gap={1}>
-                <Category sx={{ fontSize: 16 }} />
-                <Typography variant="caption">
-                  Categoria: {feedback.category}
-                </Typography>
-              </Box>
-            </Box>
-          </Stack>
-        </CardContent>
-
-        <CardActions sx={{ justifyContent: "center", marginTop: 2 }}>
-          <Button
-            onClick={() => navigate(-1)}
-            variant="contained"
-            color="primary"
-          >
-            Voltar
-          </Button>
-        </CardActions>
-      </CardComponent>
+      {feedbacks.length > 0 &&
+        feedbacks.map((feedback) => (
+          <>
+            <FeedbackDetailsCard
+              category={feedback.category}
+              comment={feedback.comment}
+              date={feedback.date}
+              negativePoint={feedback.negativePoint}
+              positivePoint={feedback.positivePoint}
+              rating={feedback.rating}
+              revieweeName={feedback.revieweeName}
+              reviewerName={feedback.reviewerName}
+              id={feedback.id}
+              revieweeId={feedback.revieweeId}
+              reviewerId={feedback.reviewerId}
+              revieweeRole={feedback.revieweeRole}
+              reviewerRole={feedback.reviewerRole}
+            />
+          </>
+        ))}
     </Box>
   );
 };

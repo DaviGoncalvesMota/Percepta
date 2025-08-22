@@ -1,93 +1,93 @@
 import { Box, Typography } from "@mui/material";
-import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { baseURL } from "../../baseURL";
+import { useContext, useEffect } from "react";
 import type { IFeedback } from "../../interfaces/IFeedback";
 import { useNavigate, useParams } from "react-router-dom";
-import FeedbackCard from "../../components/Card/Feedback/FeedbackCard";
+import FeedbackSimpleCard from "../../components/Card/Feedback/FeedbackSimpleCard";
 import { UserContext } from "../../context/User/UserContext";
+import { useFetchFeedbacks } from "../../hooks/useFetchFeedbacks";
 
 const AllFeedbacks = () => {
   const navigate = useNavigate();
   const isAuthenticated = localStorage.getItem("user");
   const { userRole } = useContext(UserContext);
 
-  if (!isAuthenticated || !userRole) {
-    navigate("/login");
-  }
-
-  const [feedbacks, setFeedbacks] = useState<IFeedback[]>([]);
+  useEffect(() => {
+    if (!isAuthenticated || !userRole) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, userRole, navigate]);
 
   const { userId } = useParams();
+  const { getFeedbacks, feedbacks, loading, error } = useFetchFeedbacks();
 
   useEffect(() => {
-    const fetchFeedbacks = async () => {
-      try {
-        axios
-          .get(baseURL + "/feedbacks")
-          .then((res) => {
-            setFeedbacks(res.data);
-          })
-          .catch((err) => console.error("Error fetching feedbacks:", err));
-      } catch (error) {
-        console.error("Error fetching feedbacks:", error);
-      }
+    const fetchData = async () => {
+      await getFeedbacks();
     };
+    fetchData();
+  }, [getFeedbacks]);
 
-    fetchFeedbacks();
-  }, []);
-
-  return (
-    <>
+  if (loading) {
+    return (
       <Box sx={{ padding: 2 }}>
         <Typography variant="h4" align="center">
-          {" "}
-          Todos os Feedbacks{" "}
+          Carregando...
         </Typography>
-        <Typography variant="body1" align="center" sx={{ marginBottom: 2 }}>
-          Aqui estão todos os feedbacks das empresas.
-        </Typography>
-
-        <Box
-          sx={{
-            display: "flex",
-            gap: 5,
-            flexWrap: "wrap",
-            justifyContent: "center",
-          }}
-        >
-          {feedbacks.length > 0 ? (
-            feedbacks
-              .filter((e) => e.revieweeRole == "company")
-              .map((feedback: IFeedback, index) => {
-                return (
-                  <FeedbackCard
-                    id={feedback.id}
-                    rating={feedback.rating}
-                    category={feedback.category}
-                    comment={feedback.comment}
-                    date={feedback.date}
-                    reviewerName={feedback.reviewerName}
-                    revieweeName={feedback.revieweeName}
-                    userId={userId}
-                    reviewerId={feedback.reviewerId}
-                    positivePoint={feedback.positivePoint}
-                    negativePoint={feedback.negativePoint}
-                    revieweeId={feedback.revieweeId}
-                    reviewerRole={feedback.reviewerRole}
-                    revieweeRole={feedback.revieweeRole}
-                    key={index}
-                  />
-                );
-              })
-          ) : (
-            <Typography variant="body2" color="text.secondary" align="center">
-              Sem feedbacks disponíveis no momento.
-            </Typography>
-          )}
-        </Box>
       </Box>
-    </>
+    );
+  }
+
+  if (error) {
+    return <p>Erro: {error}</p>;
+  }
+
+  return (
+    <Box sx={{ padding: 2 }}>
+      <Typography variant="h4" align="center">
+        Todos os Feedbacks
+      </Typography>
+      <Typography variant="body1" align="center" sx={{ marginBottom: 2 }}>
+        Aqui estão todos os feedbacks das empresas.
+      </Typography>
+
+      <Box
+        sx={{
+          display: "flex",
+          gap: 5,
+          flexWrap: "wrap",
+          justifyContent: "center",
+        }}
+      >
+        {feedbacks && feedbacks.length > 0 ? (
+          feedbacks
+            .filter((e) => e.revieweeRole === "company")
+            .map((feedback: IFeedback, index) => (
+              <FeedbackSimpleCard
+                id={feedback.id}
+                rating={feedback.rating}
+                category={feedback.category}
+                comment={feedback.comment}
+                date={feedback.date}
+                reviewerName={feedback.reviewerName}
+                revieweeName={feedback.revieweeName}
+                userId={userId}
+                reviewerId={feedback.reviewerId}
+                positivePoint={feedback.positivePoint}
+                negativePoint={feedback.negativePoint}
+                revieweeId={feedback.revieweeId}
+                reviewerRole={feedback.reviewerRole}
+                revieweeRole={feedback.revieweeRole}
+                revieweeAvatar={feedback.revieweeAvatar}
+                key={index}
+              />
+            ))
+        ) : (
+          <Typography variant="body2" color="text.secondary" align="center">
+            Sem feedbacks disponíveis no momento.
+          </Typography>
+        )}
+      </Box>
+    </Box>
   );
 };
 
