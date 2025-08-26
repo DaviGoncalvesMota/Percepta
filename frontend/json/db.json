@@ -38,6 +38,7 @@
       "name": "Maria Silva",
       "email": "maria@gmail.com",
       "phone": "11988887777",
+      "password": "1234",
       "avatar": "https://m.media-amazon.com/images/M/MV5BMTE3YjhhMTQtYmUyYy00MWU5LTg4N2YtMTkxMDI0Y2FhMzg3XkEyXkFqcGc@._V1_QL75_UX500_CR0,0,500,281_.jpg",
       "address": "Rua das Flores, 123, São Paulo, SP",
       "id": "201"
@@ -64,6 +65,7 @@
       "id": "204",
       "name": "João Pereira",
       "email": "joao@gmail.com",
+      "password": "1234",
       "phone": "1177776666",
       "address": "Rua Nova, 99, Santo André, SP",
       "avatar": "https://i.pravatar.cc/150?img=1"
@@ -72,6 +74,7 @@
       "id": "205",
       "name": "Lucas Andrade",
       "email": "lucas@gmail.com",
+      "password": "1234",
       "phone": "1166665555",
       "address": "Av. Paulista, 1000, São Paulo, SP",
       "avatar": "https://i.pravatar.cc/150?img=2"
@@ -80,6 +83,7 @@
       "id": "206",
       "name": "Ana Costa",
       "email": "ana@gmail.com",
+      "password": "1234",
       "phone": "1155554444",
       "address": "Rua das Palmeiras, 45, São Paulo, SP",
       "avatar": "https://i.pravatar.cc/150?img=3"
@@ -88,9 +92,15 @@
       "id": "207",
       "name": "Beatriz Mendes",
       "email": "beatriz@gmail.com",
+      "password": "1234",
       "phone": "1144443333",
       "address": "Rua do Sol, 200, Guarulhos, SP",
       "avatar": "https://i.pravatar.cc/150?img=4"
+    },
+    {
+      "id": "b81a",
+      "email": "maria@gmail.com",
+      "password": "1234"
     }
   ],
   "companies": [
@@ -98,6 +108,7 @@
       "name": "TechCorp",
       "email": "techcorp@gmail.com",
       "phone": "1133334444",
+      "password": "1234",
       "avatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbS13GsqAUT6e72wJQ1ueAfiYif5xOn0iRhA&s",
       "address": "Av. Tecnologia, 456, São Paulo, SP",
       "id": "102"
@@ -114,6 +125,16 @@
       "employersNumber": 80,
       "objective": "Transformar ideias em softwares inteligentes e acessíveis.",
       "avatar": "https://media.licdn.com/dms/image/v2/C510BAQEgzZrDAo2-KA/company-logo_200_200/company-logo_200_200/0/1630579186122/king_group_india_logo?e=2147483647&v=beta&t=SJNQkT-D8Lt9fXa5ex1vgR2Hd32ix9tuOCbzRzTnYxE"
+    },
+    {
+      "id": "247c",
+      "email": "techcorp@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": "b9eb",
+      "email": "techcorp@gmail.com",
+      "password": "1234"
     }
   ]
 }

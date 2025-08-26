@@ -2,48 +2,39 @@ import { Box, Button, TextField } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/User/UserContext";
 import axios from "axios";
-import { baseURL } from "../../../baseURL";
 import type { IDialogForm } from "../../../interfaces/IDialog";
 import type { IUsers } from "../../../interfaces/IUsers";
+import { useFetchUsers } from "../../../hooks/useFetchUsers";
 
 const UserProfileForm = ({ userId, onClose }: IDialogForm) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [avatar, setAvatar] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
+  const { user, getUserById } = useFetchUsers(userId);
+  const [name, setName] = useState(user[0].name || "");
+  const [email, setEmail] = useState(user[0].email || "");
+  const [avatar, setAvatar] = useState(user[0].avatar || "");
+  const [phone, setPhone] = useState(user[0].phone || "");
+  const [address, setAddress] = useState(user[0].address || "");
   const { userRole } = useContext(UserContext);
 
-  const endpointGet =
-    userRole === "employer" ? "/employers?id=" : "/companies?id=";
-
-  const endpointPut = userRole === "employer" ? "/employers/" : "/companies/";
-
   useEffect(() => {
-    axios
-      .get(baseURL + endpointGet + userId)
-      .then((response) => {
-        const user: IUsers = response.data[0];
-        setName(user.name);
-        setEmail(user.email);
-        setAvatar(user.avatar);
-        setPhone(user.phone);
-        setAddress(user.address);
-      })
-      .catch((err) => console.log(err));
-  }, [endpointGet, userId]);
+    const fetchData = async () => {
+      await getUserById();
+    };
+    fetchData();
+  }, [getUserById]);
+
+  // const endpointPut = userRole === "employer" ? "/employers/" : "/companies/";
 
   const handleSubmit = () => {
     const newUserData = { name, email, phone, avatar, address };
-
-    axios
-      .put(baseURL + endpointPut + userId, newUserData)
-      .then((response) => {
-        const updatedUser: IUsers = response.data[0];
-        onClose(updatedUser);
-      })
-      .catch((err) => console.log(err));
-    window.location.reload();
+    console.log(newUserData);
+    // axios
+    //   .put(baseURL + endpointPut + userId, newUserData)
+    //   .then((response) => {
+    //     const updatedUser: IUsers = response.data[0];
+    //     onClose(updatedUser);
+    //   })
+    //   .catch((err) => console.log(err));
+    // window.location.reload();
   };
 
   return (

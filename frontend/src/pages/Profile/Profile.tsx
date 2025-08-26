@@ -1,31 +1,37 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../../context/User/UserContext";
 import UserProfileCard from "../../components/Card/User/UserProfileCard";
 import Dialog from "../../components/Dialog/Dialog";
-import { useFetchUsers } from "../../hooks/useFetchUsers";
+import { useFetchUserById } from "../../hooks/useFetchUserById";
 
 const Profile = () => {
   const navigate = useNavigate();
-  const isAuthenticated = localStorage.getItem("user");
+  const id = localStorage.getItem("userId");
   const { userRole } = useContext(UserContext);
 
-  if (!isAuthenticated || !userRole) {
+  if (!id || !userRole) {
     navigate("/login");
   }
 
   const { userId } = useParams();
   const [dialog, setDialog] = useState(false);
+  const { data: user, loading, error } = useFetchUserById(userId!);
 
-  const { getUserById, user } = useFetchUsers(userId)
+  if (loading) {
+    return (
+      <Box sx={{ padding: 2 }}>
+        <Typography variant="h4" align="center">
+          Carregando...
+        </Typography>
+      </Box>
+    );
+  }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await getUserById()
-    }
-    fetchData()
-  }, [userRole, userId, getUserById]);
+  if (error) {
+    return <p>Erro: {error}</p>;
+  }
 
   return (
     <>

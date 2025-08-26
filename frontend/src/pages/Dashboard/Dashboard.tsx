@@ -23,11 +23,9 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import type { IFeedback } from "../../interfaces/IFeedback";
 import { UserContext } from "../../context/User/UserContext";
-import axios from "axios";
 import { companyCategories, employeeCategories } from "../../data/categories";
 import React from "react";
 import Dialog from "../../components/Dialog/Dialog";
-import { useFetchFeedbacks } from "../../hooks/useFetchFeedbacks";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -39,29 +37,12 @@ const Dashboard = () => {
   }
 
   const { userId } = useParams();
-  const [allReviewerFeedbacks, setAllReviewerFeedbacks] = useState<IFeedback[]>([]);
+  const [ allReviewerFeedbacks, setReviewerFeedbacks ] = useState<IFeedback[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [dialog, setDialog] = useState<React.ReactNode>();
   const open = Boolean(anchorEl);
-
-  const {
-    getRevieweeFeedbacks,
-    revieweeFeedbacks,
-    setRevieweeFeedbacks,
-    getReviewerFeedbacks,
-    reviewerFeedbacks,
-    setReviewerFeedbacks
-  } = useFetchFeedbacks(userId!);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await getRevieweeFeedbacks();
-      await getReviewerFeedbacks();
-    };
-    fetchData();
-  }, [userId, getRevieweeFeedbacks, getReviewerFeedbacks]);
 
   useEffect(() => {
     if (selectedCategories.length > 0) {

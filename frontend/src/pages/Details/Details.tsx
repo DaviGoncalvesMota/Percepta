@@ -1,9 +1,9 @@
 import { Typography, Box } from "@mui/material";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../../context/User/UserContext";
-import { useFetchFeedbacks } from "../../hooks/useFetchFeedbacks";
 import FeedbackDetailsCard from "../../components/Card/Feedback/FeedbackDetailsCard";
+import { useFetchFeedbackDetails } from "../../hooks/useFetchFeedbackDetails";
 
 const Details = () => {
   const navigate = useNavigate();
@@ -16,14 +16,8 @@ const Details = () => {
 
   const { id } = useParams();
 
-  const { getFeedbacks, feedbacks, loading, error } = useFetchFeedbacks(id);
+  const { data: feedback, loading, error } = useFetchFeedbackDetails(id!);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await getFeedbacks();
-    };
-    fetchData();
-  }, [getFeedbacks]);
 
   if (loading) {
     return (
@@ -39,8 +33,8 @@ const Details = () => {
 
   return (
     <Box sx={{ padding: 2, maxWidth: 600, margin: "auto" }}>
-      {feedbacks.length > 0 &&
-        feedbacks.map((feedback) => (
+      {feedback.length > 0 &&
+        feedback.map((feedback) => (
           <>
             <FeedbackDetailsCard
               category={feedback.category}
@@ -56,6 +50,7 @@ const Details = () => {
               reviewerId={feedback.reviewerId}
               revieweeRole={feedback.revieweeRole}
               reviewerRole={feedback.reviewerRole}
+              revieweeAvatar={feedback.revieweeAvatar}
             />
           </>
         ))}

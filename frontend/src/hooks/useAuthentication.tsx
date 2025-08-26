@@ -1,36 +1,36 @@
-import { useContext, useState } from "react";
-import { loginService } from "../services/api";
-import { UserContext } from "../context/User/UserContext";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { login } from "../services/api";
 import type { ILogin } from "../interfaces/IAuth";
+import type { IUsers } from "../interfaces/IUsers";
+import { useEndpoint } from "./useEndpoint";
 
 export function useAuthentication() {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
-  const { userRole } = useContext(UserContext);
+  const [data, setData] = useState<IUsers | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const endpoint = useEndpoint();
 
-  const authUser = async ({ email, password }: ILogin) => {
-    if (!email || !password) {
-      alert("Por favor, preencha todos os campos.");
-      return;
-    }
+  const authenticate = async ({ email, password }: ILogin): Promise<boolean> => {
+    setLoading(true);
+    setError(null);
 
-    if (!userRole) {
-      alert("Por favor, selecione o tipo de usuário.");
-      return;
+    try {
+      const response = await login(endpoint, { email, password });
+
+      if (response.data) {
+        setData(response.data);
+        localStorage.setItem("userId", response.data.id);
+        return true;
+      }
+
+      return false;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+      return false;
+    } finally {
+      setLoading(false);
     }
-    loginService({ email, password })
-      .then((response) => {
-        if (response.data.length > 0) {
-          setData(response.data);
-          navigate("/");
-        }
-      })
-      .catch((err) => setError(err))
-      .finally(() => setLoading(false));
   };
 
-  return { data, authUser, loading, error };
+  return { data, loading, error, authenticate };
 }

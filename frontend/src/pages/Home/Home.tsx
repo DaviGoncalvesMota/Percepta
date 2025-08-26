@@ -4,17 +4,32 @@ import { ThemeContext } from "../../context/Theme/ThemeContext";
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/User/UserContext";
+import { useAuthentication } from "../../hooks/useAuthentication";
 
 const Home = () => {
   const navigate = useNavigate();
-  const isAuthenticated = localStorage.getItem("user");
   const { userRole } = useContext(UserContext);
+  const { themeMode } = useContext(ThemeContext);
+  const { data, loading, error } = useAuthentication();
+  const id = localStorage.getItem("userId");
 
-  if (!isAuthenticated || !userRole) {
+  if (!data || !id || !userRole) {
     navigate("/login");
   }
 
-  const { themeMode } = useContext(ThemeContext);
+  if (loading) {
+    return (
+      <Box sx={{ padding: 2 }}>
+        <Typography variant="h4" align="center">
+          Carregando...
+        </Typography>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return <p>Erro: {error}</p>;
+  }
 
   const verifyTheme = themeMode == "light" ? "black" : "white";
 
@@ -63,7 +78,7 @@ const Home = () => {
         <br />
         <Button
           component={Link}
-          to={"/allfeedbacks/" + isAuthenticated}
+          to={"/allfeedbacks/" + id}
           variant="contained"
         >
           {" "}

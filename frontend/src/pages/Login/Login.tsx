@@ -8,7 +8,7 @@ import {
   Stack,
   IconButton,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState, type MouseEvent } from "react";
 import { ThemeContext } from "../../context/Theme/ThemeContext";
 import { Brightness5, DarkMode } from "@mui/icons-material";
@@ -20,35 +20,23 @@ const Login = () => {
   const [password, setPassword] = useState<string>("");
   const { userRole, setUserRole } = useContext(UserContext);
   const { themeMode, setThemeMode } = useContext(ThemeContext);
-  const { authUser, loading, error } = useAuthentication();
-
-  if (loading) {
-    return (
-      <Box sx={{ padding: 2 }}>
-        <Typography variant="h4" align="center">
-          Carregando os detalhes do feedback...
-        </Typography>
-      </Box>
-    );
-  }
-
-  if (error) return <p>{error}</p>;
+  const navigate = useNavigate();
+  const { authenticate, loading, error } = useAuthentication();
 
   const handleTheme = () => {
     setThemeMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
   };
 
   const handleSubmit = async (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    const user = {
-      email,
-      password
+    const success = await authenticate({ email: email, password: password });
+
+    if (success) {
+      navigate("/");
+    } else {
+      alert("Usuário ou senha inválidos.");
     }
-
-    const res = await authUser(user)
-
-    console.log(res)
   };
 
   return (
@@ -116,6 +104,7 @@ const Login = () => {
                 label="Email"
                 variant="outlined"
                 type="email"
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
               <TextField
@@ -123,16 +112,26 @@ const Login = () => {
                 label="Senha"
                 variant="outlined"
                 type="password"
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+
               <Button
                 onClick={handleSubmit}
                 variant="contained"
                 size="large"
                 color="primary"
+                disabled={loading}
               >
-                Entrar
+                {loading ? "Entrando..." : "Entrar"}
               </Button>
+
+              {error && (
+                <Typography variant="body2" color="error" textAlign="center">
+                  {error}
+                </Typography>
+              )}
+
               <Typography
                 variant="body2"
                 textAlign="center"

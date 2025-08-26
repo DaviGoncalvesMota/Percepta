@@ -8,24 +8,16 @@ import { useFetchFeedbacks } from "../../hooks/useFetchFeedbacks";
 
 const AllFeedbacks = () => {
   const navigate = useNavigate();
-  const isAuthenticated = localStorage.getItem("user");
+  const { userId } = useParams();
+  const { data: feedbacks, loading, error } = useFetchFeedbacks();
   const { userRole } = useContext(UserContext);
 
   useEffect(() => {
-    if (!isAuthenticated || !userRole) {
+    if (!userId || !userRole) {
       navigate("/login");
     }
-  }, [isAuthenticated, userRole, navigate]);
+  }, [userRole, navigate, userId]);
 
-  const { userId } = useParams();
-  const { getFeedbacks, feedbacks, loading, error } = useFetchFeedbacks();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await getFeedbacks();
-    };
-    fetchData();
-  }, [getFeedbacks]);
 
   if (loading) {
     return (

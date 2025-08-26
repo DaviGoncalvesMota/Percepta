@@ -1,10 +1,7 @@
 import { useContext } from "react";
 import { UserContext } from "../context/User/UserContext";
 
-export const Endpoint = () => {
+export const useEndpoint = (): string => {
   const { userRole } = useContext(UserContext);
-  const endpoint = userRole === "employer" ? "employers" : "companies";
-  return endpoint
+  return userRole === "employer" ? "/employers" : "/companies";
 };
-
-

@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { Box, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../../context/User/UserContext";
@@ -15,14 +15,7 @@ const AvailableUsers = () => {
 
   const { userId } = useParams();
 
-  const { getUsers, users, loading, error } = useFetchUsers();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await getUsers()
-    }
-    fetchData()
-  }, [getUsers])
+  const { data: users, loading, error } = useFetchUsers();
 
    if (loading) {
     return (
