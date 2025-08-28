@@ -4,7 +4,7 @@ import type { IUserCard } from "../../../interfaces/IUsers";
 import { useContext } from "react";
 import { ReviewContext } from "../../../context/Review/ReviewContext";
 
-const UserCard = ({ name, logo, userId, revieweeId }: IUserCard) => {
+const UserSelectCard = ({ name, logo, userId, revieweeId }: IUserCard) => {
   const { setRevieweeName, setRevieweeId, setRevieweeAvatar } = useContext(ReviewContext);
 
   return (
@@ -48,4 +48,4 @@ const UserCard = ({ name, logo, userId, revieweeId }: IUserCard) => {
   );
 };
 
-export default UserCard;
+export default UserSelectCard;

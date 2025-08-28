@@ -13,7 +13,8 @@ import { useContext, useState, type MouseEvent } from "react";
 import { ThemeContext } from "../../context/Theme/ThemeContext";
 import { Brightness5, DarkMode } from "@mui/icons-material";
 import { UserContext } from "../../context/User/UserContext";
-import { useAuthentication } from "../../hooks/useAuthentication";
+import { useAuthentication } from "../../hooks/Auth/useAuthentication";  
+import LoadingScreen from "../../components/Loading/LoadingScreen";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
@@ -30,7 +31,11 @@ const Login = () => {
   const handleSubmit = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-    const success = await authenticate({ email: email, password: password });
+    if(loading) {
+      <LoadingScreen />;
+    }
+
+    const success = await authenticate({ email, password });
 
     if (success) {
       navigate("/");

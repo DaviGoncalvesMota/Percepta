@@ -4,16 +4,16 @@ import { ThemeContext } from "../../context/Theme/ThemeContext";
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/User/UserContext";
-import { useAuthentication } from "../../hooks/useAuthentication";
+import { useAuthentication } from "../../hooks/Auth/useAuthentication";
 
 const Home = () => {
   const navigate = useNavigate();
   const { userRole } = useContext(UserContext);
   const { themeMode } = useContext(ThemeContext);
-  const { data, loading, error } = useAuthentication();
+  const { loading, error } = useAuthentication();
   const id = localStorage.getItem("userId");
 
-  if (!data || !id || !userRole) {
+  if (!id || !userRole) {
     navigate("/login");
   }
 
@@ -76,11 +76,7 @@ const Home = () => {
           Seu melhor site de Avaliação.
         </Typography>
         <br />
-        <Button
-          component={Link}
-          to={"/allfeedbacks/" + id}
-          variant="contained"
-        >
+        <Button component={Link} to={"/allfeedbacks/" + id} variant="contained">
           {" "}
           Ir para Feedbacks{" "}
         </Button>

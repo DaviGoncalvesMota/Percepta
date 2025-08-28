@@ -48,7 +48,7 @@ const Dialog = ({
               <UserProfileForm
                 userId={userId}
                 onClose={(updatedUser) => {
-                  onSubmit(updatedUser);
+                  onSubmit?.(updatedUser);
                   onClose();
                 }}
               />

@@ -34,7 +34,6 @@ const UserProfileCard = ({
       }}
     >
       <CardContent>
-        {/* Conteúdo do perfil */}
         <Stack spacing={3} alignItems="center" textAlign="center">
           <Avatar
             src={avatar}
@@ -95,7 +94,8 @@ const UserProfileCard = ({
               </Button>
               <Button
                 onClick={() => {
-                  localStorage.removeItem("user");
+                  localStorage.removeItem("userId");
+                  localStorage.removeItem("userRole");
                   window.location.reload();
                 }}
                 variant="outlined"

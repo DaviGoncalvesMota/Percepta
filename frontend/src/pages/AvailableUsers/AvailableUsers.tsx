@@ -1,33 +1,27 @@
 import { useContext } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../../context/User/UserContext";
-import UserCard from "../../components/Card/User/UserCard";
-import { useFetchUsers } from "../../hooks/useFetchUsers";
+import UserSelectedCard from "../../components/Card/User/UserSelectCard";
+import { useFetchUsers } from "../../hooks/Actions/Get/Users/useFetchUsers";
+import LoadingScreen from "../../components/Loading/LoadingScreen";
 
 const AvailableUsers = () => {
   const navigate = useNavigate();
-  const isAuthenticated = localStorage.getItem("user");
+  const isAuthenticated = localStorage.getItem("userId");
   const { userRole } = useContext(UserContext);
   if (!isAuthenticated || !userRole) {
     navigate("/login");
   }
 
   const { userId } = useParams();
-
   const { data: users, loading, error } = useFetchUsers();
 
-   if (loading) {
-    return (
-      <Box sx={{ padding: 2 }}>
-        <Typography variant="h4" align="center">
-          Carregando...
-        </Typography>
-      </Box>
-    );
+  if (loading) {
+    <LoadingScreen />;
   }
 
-  if (error) return <p>{error}</p>; 
+  if (error) return <p>{error}</p>;
 
   return (
     <>
@@ -42,7 +36,7 @@ const AvailableUsers = () => {
       >
         {users.length > 0 &&
           users.map((company, index) => (
-            <UserCard
+            <UserSelectedCard
               key={index}
               name={company.name}
               logo={company.avatar}

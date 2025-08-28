@@ -4,11 +4,7 @@ import { Brightness5, DarkMode, Menu } from "@mui/icons-material";
 import { darkTheme, lightTheme } from "../../styles/Theme";
 import { useContext } from "react";
 import { ThemeContext } from "../../context/Theme/ThemeContext";
-
-interface AppBarProps {
-  open: boolean;
-  handleDrawerOpen: () => void;
-}
+import type { AppBarProps } from "../../interfaces/IAppbar";
 
 const AppBar = ({ open, handleDrawerOpen }: AppBarProps) => {
   const { themeMode, setThemeMode } = useContext(ThemeContext);

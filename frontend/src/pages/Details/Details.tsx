@@ -1,13 +1,14 @@
-import { Typography, Box } from "@mui/material";
+import { Box } from "@mui/material";
 import { useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../../context/User/UserContext";
 import FeedbackDetailsCard from "../../components/Card/Feedback/FeedbackDetailsCard";
-import { useFetchFeedbackDetails } from "../../hooks/useFetchFeedbackDetails";
+import { useFetchFeedbackDetails } from "../../hooks/Actions/Get/Feedbacks/useFetchFeedbackDetails";
+import LoadingScreen from "../../components/Loading/LoadingScreen";
 
 const Details = () => {
   const navigate = useNavigate();
-  const isAuthenticated = localStorage.getItem("user");
+  const isAuthenticated = localStorage.getItem("userId");
   const { userRole } = useContext(UserContext);
 
   if (!isAuthenticated || !userRole) {
@@ -18,21 +19,14 @@ const Details = () => {
 
   const { data: feedback, loading, error } = useFetchFeedbackDetails(id!);
 
-
   if (loading) {
-    return (
-      <Box sx={{ padding: 2 }}>
-        <Typography variant="h4" align="center">
-          Carregando os detalhes do feedback...
-        </Typography>
-      </Box>
-    );
+    <LoadingScreen />;
   }
 
   if (error) return <p>{error}</p>;
 
   return (
-    <Box sx={{ padding: 2, maxWidth: 600, margin: "auto" }}>
+    <Box sx={{ padding: 2, maxWidth: 600, maxHeight: 500 , margin: "auto" }}>
       {feedback.length > 0 &&
         feedback.map((feedback) => (
           <>

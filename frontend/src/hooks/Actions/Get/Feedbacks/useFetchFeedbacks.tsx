@@ -1,22 +1,27 @@
 import { useEffect, useState } from "react";
-import type { IFeedback } from "../interfaces/IFeedback";
-import { getFeedbackDetails } from "../services/api";
+import type { IFeedback } from "../../../../interfaces/IFeedback";
+import { getFeedbacks } from "../../../../services/api";
 
-export function useFetchFeedbackDetails(id: string) {
+export function useFetchFeedbacks() {
   const [data, setData] = useState<IFeedback[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     try {
-      getFeedbackDetails(id)
+      setLoading(true);
+      getFeedbacks()
         .then((response) => setData(response.data))
         .catch((err) => setError(err))
         .finally(() => setLoading(false));
     } catch (err) {
       console.log("Erro: ", err);
     }
-  }, [id]);
+  }, []);
 
-  return { data, loading, error };
+  return {
+    data,
+    loading,
+    error,
+  };
 }

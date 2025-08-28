@@ -4,7 +4,7 @@ import { UserContext } from "../../context/User/UserContext";
 
 const IA = () => {
   const navigate = useNavigate();
-  const isAuthenticated = localStorage.getItem("user");
+  const isAuthenticated = localStorage.getItem("userId");
   const { userRole } = useContext(UserContext);
 
   if (!isAuthenticated || !userRole) {

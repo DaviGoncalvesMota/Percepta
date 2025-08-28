@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const About = () => {
   const navigate = useNavigate();
-  const isAuthenticated = localStorage.getItem("user");
+  const isAuthenticated = localStorage.getItem("userId");
   const isUserRoleTrue = localStorage.getItem("userRole");
   if (!isAuthenticated || !isUserRoleTrue) {
     navigate("/login");

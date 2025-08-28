@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { login } from "../services/api";
-import type { ILogin } from "../interfaces/IAuth";
-import type { IUsers } from "../interfaces/IUsers";
-import { useEndpoint } from "./useEndpoint";
+import { login } from "../../services/api";
+import type { ILogin } from "../../interfaces/IAuth";
+import type { IUsers } from "../../interfaces/IUsers";
+import { useEndpoint } from "../Common/useEndpoint";
 
 export function useAuthentication() {
   const [data, setData] = useState<IUsers | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const endpoint = useEndpoint();
+  const { endpointCurrentUser: endpoint } = useEndpoint();
 
   const authenticate = async ({ email, password }: ILogin): Promise<boolean> => {
     setLoading(true);
@@ -19,7 +19,7 @@ export function useAuthentication() {
 
       if (response.data) {
         setData(response.data);
-        localStorage.setItem("userId", response.data.id);
+        localStorage.setItem("userId", response.data[0].id);
         return true;
       }
 

@@ -1,43 +1,38 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useState } from "react";
 import { UserContext } from "../../context/User/UserContext";
 import UserProfileCard from "../../components/Card/User/UserProfileCard";
 import Dialog from "../../components/Dialog/Dialog";
-import { useFetchUserById } from "../../hooks/useFetchUserById";
+import { useFetchUserById } from "../../hooks/Actions/Get/Users/useFetchUserById";
+import LoadingScreen from "../../components/Loading/LoadingScreen";
 
 const Profile = () => {
   const navigate = useNavigate();
   const id = localStorage.getItem("userId");
   const { userRole } = useContext(UserContext);
 
-  if (!id || !userRole) {
-    navigate("/login");
-  }
-
   const { userId } = useParams();
   const [dialog, setDialog] = useState(false);
   const { data: user, loading, error } = useFetchUserById(userId!);
 
+  if (!id || !userRole) {
+    navigate("/login");
+  }
+
   if (loading) {
-    return (
-      <Box sx={{ padding: 2 }}>
-        <Typography variant="h4" align="center">
-          Carregando...
-        </Typography>
-      </Box>
-    );
+    <LoadingScreen />;
   }
 
   if (error) {
-    return <p>Erro: {error}</p>;
+    return <p>Erro: {String(error)}</p>;
   }
 
   return (
     <>
       {dialog && user && (
         <Dialog
-          userId={user[0].id}
+          userId={user.id}
           onClose={() => setDialog(false)}
           label="profile"
         />
@@ -55,12 +50,12 @@ const Profile = () => {
       >
         {user && (
           <UserProfileCard
-            id={user[0].id}
-            name={user[0].name}
-            email={user[0].email}
-            avatar={user[0].avatar}
-            phone={user[0].phone}
-            address={user[0].address}
+            id={user.id}
+            name={user.name}
+            email={user.email}
+            avatar={user.avatar}
+            phone={user.phone}
+            address={user.address}
             setDialog={() => setDialog(true)}
           />
         )}

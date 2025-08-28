@@ -1,45 +1,92 @@
-import { Box, Button, TextField } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../../context/User/UserContext";
-import axios from "axios";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import type { IDialogForm } from "../../../interfaces/IDialog";
 import type { IUsers } from "../../../interfaces/IUsers";
-import { useFetchUsers } from "../../../hooks/useFetchUsers";
+import { useFetchUserById } from "../../../hooks/Actions/Get/Users/useFetchUserById";
+import { useUpdateUser } from "../../../hooks/Actions/Put/Users/useUpdateUser";
 
 const UserProfileForm = ({ userId, onClose }: IDialogForm) => {
-  const { user, getUserById } = useFetchUsers(userId);
-  const [name, setName] = useState(user[0].name || "");
-  const [email, setEmail] = useState(user[0].email || "");
-  const [avatar, setAvatar] = useState(user[0].avatar || "");
-  const [phone, setPhone] = useState(user[0].phone || "");
-  const [address, setAddress] = useState(user[0].address || "");
-  const { userRole } = useContext(UserContext);
+  const {
+    data: user,
+    loading: loadingFetchUser,
+    error: fetchUserError,
+  } = useFetchUserById(userId!);
+
+  const {
+    updateUser,
+    data: response,
+    loading: loadingUpdateUser,
+    error: updateError,
+  } = useUpdateUser();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
-      await getUserById();
-    };
-    fetchData();
-  }, [getUserById]);
+    if (user) {
+      setName(user.name);
+      setEmail(user.email);
+      setPassword(user.password);
+      setAvatar(user.avatar);
+      setPhone(user.phone);
+      setAddress(user.address);
+    }
+  }, [user]);
 
-  // const endpointPut = userRole === "employer" ? "/employers/" : "/companies/";
+  if (loadingFetchUser) {
+    return (
+      <Box sx={{ padding: 2 }}>
+        <Typography variant="h4" align="center">
+          Carregando...
+        </Typography>
+      </Box>
+    );
+  }
+
+  if (fetchUserError) {
+    return <p>{String(fetchUserError)}</p>;
+  }
 
   const handleSubmit = () => {
-    const newUserData = { name, email, phone, avatar, address };
-    console.log(newUserData);
-    // axios
-    //   .put(baseURL + endpointPut + userId, newUserData)
-    //   .then((response) => {
-    //     const updatedUser: IUsers = response.data[0];
-    //     onClose(updatedUser);
-    //   })
-    //   .catch((err) => console.log(err));
-    // window.location.reload();
+    if (!user) return;
+
+    const newUserData: IUsers = {
+      id: userId!,
+      name,
+      email,
+      password,
+      phone,
+      avatar,
+      address,
+    };
+
+    updateUser(userId!, newUserData).then(() => {
+      try {
+        if (loadingUpdateUser) {
+          return (
+            <Box sx={{ padding: 2 }}>
+              <Typography variant="h4" align="center">
+                Carregando...
+              </Typography>
+            </Box>
+          );
+        }
+        if (response) {
+          onClose(response);
+          window.location.reload();
+        }
+      } catch (error) {
+        console.log(error, updateError);
+      }
+    });
   };
 
   return (
     <>
-      <Box></Box>
       <TextField
         label="Nome"
         required
@@ -48,7 +95,6 @@ const UserProfileForm = ({ userId, onClose }: IDialogForm) => {
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
-
       <TextField
         label="Email"
         required
@@ -57,7 +103,15 @@ const UserProfileForm = ({ userId, onClose }: IDialogForm) => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-
+      <TextField
+        label="Senha"
+        required
+        fullWidth
+        margin="normal"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
       <TextField
         label="Avatar"
         required
@@ -67,7 +121,6 @@ const UserProfileForm = ({ userId, onClose }: IDialogForm) => {
         value={avatar}
         onChange={(e) => setAvatar(e.target.value)}
       />
-
       <TextField
         label="Telefone"
         required
@@ -76,7 +129,6 @@ const UserProfileForm = ({ userId, onClose }: IDialogForm) => {
         value={phone}
         onChange={(e) => setPhone(e.target.value)}
       />
-
       <TextField
         label="Endereço"
         required

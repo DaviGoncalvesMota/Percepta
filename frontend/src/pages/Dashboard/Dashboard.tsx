@@ -21,40 +21,61 @@ import {
 } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import type { IFeedback } from "../../interfaces/IFeedback";
 import { UserContext } from "../../context/User/UserContext";
-import { companyCategories, employeeCategories } from "../../data/categories";
 import React from "react";
 import Dialog from "../../components/Dialog/Dialog";
+import { useCategories } from "../../hooks/Common/useCategories";
+import { useFetchReviewerFeedbacks } from "../../hooks/Actions/Get/Feedbacks/useFetchReviewerFeedbacks";
+import type { IFeedback } from "../../interfaces/IFeedback";
+import { useDeleteFeedback } from "../../hooks/Actions/Delete/useDeleteFeedback";
+import LoadingScreen from "../../components/Loading/LoadingScreen";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const isAuthenticated = localStorage.getItem("user");
+  const isAuthenticated = localStorage.getItem("userId");
   const { userRole } = useContext(UserContext);
 
   if (!isAuthenticated || !userRole) {
     navigate("/login");
   }
 
+  const categories = useCategories();
   const { userId } = useParams();
-  const [ allReviewerFeedbacks, setReviewerFeedbacks ] = useState<IFeedback[]>([]);
+  const {
+    data: reviewerFeedbacks,
+    loading: loadingReviewerFeedbacks,
+    error: errorOnFetchReviewerFeedbacks,
+  } = useFetchReviewerFeedbacks(userId || "");
+  const {
+    delFeedback,
+    loading: loadingNewFeedbackList,
+    error: errorOnDeleteFeedback,
+  } = useDeleteFeedback();
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [dialog, setDialog] = useState<React.ReactNode>();
   const open = Boolean(anchorEl);
+  const [filteredFeedbacks, setFilteredFeedbacks] = useState<IFeedback[]>([]);
+
+  if (loadingReviewerFeedbacks) {
+    <LoadingScreen />;
+  }
 
   useEffect(() => {
     if (selectedCategories.length > 0) {
-      setReviewerFeedbacks(
-        allReviewerFeedbacks.filter((feedback) =>
+      setFilteredFeedbacks(
+        reviewerFeedbacks.filter((feedback) =>
           selectedCategories.includes(feedback.category)
         )
       );
     } else {
-      setReviewerFeedbacks(allReviewerFeedbacks);
+      setFilteredFeedbacks(reviewerFeedbacks);
     }
-  }, [selectedCategories, allReviewerFeedbacks, setReviewerFeedbacks]);
+  }, [selectedCategories, reviewerFeedbacks]);
+
+  if (errorOnFetchReviewerFeedbacks)
+    return <p>{errorOnFetchReviewerFeedbacks}</p>;
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
@@ -75,18 +96,23 @@ const Dashboard = () => {
     setSelectedCategories((prev) => prev.filter((c) => c !== category));
   };
 
-  // const handleDeleteFeedback = (id: string) => {
-  //   try {
-  //     axios.delete(`${baseURL}/feedbacks/${id}`).then(() => {
-  //       window.location.reload();
-  //     });
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
-  const categories =
-    userRole === "company" ? employeeCategories : companyCategories;
+  const handleDeleteFeedback = (id: string) => {
+    try {
+      if (loadingNewFeedbackList) {
+        <LoadingScreen />;
+      }
+      delFeedback(id).then((success) => {
+        if (success) {
+          window.location.reload();
+        } else {
+          alert("Erro ao deletar feedback. Tente novamente.");
+        }
+      });
+    } catch (err) {
+      console.log(err, errorOnDeleteFeedback);
+      alert("Erro ao deletar feedback. Tente novamente.");
+    }
+  };
 
   return (
     <>
@@ -186,9 +212,8 @@ const Dashboard = () => {
         </Typography>
         <ThumbDown color="primary" fontSize="medium" />
       </Box>
-
-      {reviewerFeedbacks.length > 0 ? (
-        reviewerFeedbacks
+      {filteredFeedbacks.length > 0 ? (
+        filteredFeedbacks
           .filter((f) =>
             f.comment?.toLowerCase().includes(searchText.toLowerCase())
           )
@@ -210,7 +235,18 @@ const Dashboard = () => {
                   </Typography>
                 </Box>
 
-                <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 2,
+                    position: "fixed",
+                    left: "40%",
+                    transform: "translateX(-50%)",
+                    p: 1,
+                    borderRadius: 1,
+                  }}
+                >
                   <strong>Nota:</strong>{" "}
                   <Rating
                     value={feedback.rating}
@@ -218,6 +254,19 @@ const Dashboard = () => {
                     readOnly
                     size="medium"
                   />
+                </Box>
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    left: "60%",
+                    position: "fixed",
+                  }}
+                >
+                  <strong style={{ width: 100 }}>Categoria:</strong>
+                  <Chip label={feedback.category} color="primary" />
                 </Box>
 
                 <Box sx={{ display: "flex", gap: 2 }}>
@@ -239,7 +288,11 @@ const Dashboard = () => {
                   >
                     <Edit />
                   </IconButton>
-                  <IconButton>
+                  <IconButton
+                    onClick={() => {
+                      handleDeleteFeedback(feedback.id);
+                    }}
+                  >
                     <Delete />
                   </IconButton>
                 </Box>
@@ -283,6 +336,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-
-// onClick={() => handleDeleteFeedback(feedback.id)}

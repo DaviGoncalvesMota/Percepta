@@ -8,16 +8,21 @@ import {
   Typography,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useId, useState } from "react";
 import { ReviewContext } from "../../../context/Review/ReviewContext";
 import { UserContext } from "../../../context/User/UserContext";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { companyCategories, employeeCategories } from "../../../data/categories";
+import {
+  companyCategories,
+  employeeCategories,
+} from "../../../data/categories";
 import type { IFeedbackForm } from "../../../interfaces/IFeedback";
-import { useFetchFeedbacks } from "../../../hooks/useFetchFeedbacks";
-import { useFetchUsers } from "../../../hooks/useFetchUsers";
+import { useInsertFeedback } from "../../../hooks/Actions/Post/useInsertFeedback";
+import { useUpdateFeedback } from "../../../hooks/Actions/Put/Feedbacks/useUpdateFeedback";
+import { useFetchUserById } from "../../../hooks/Actions/Get/Users/useFetchUserById";
+import { useFetchFeedbackDetails } from "../../../hooks/Actions/Get/Feedbacks/useFetchFeedbackDetails";
 
 const FeedbackForm = ({
   userId,
@@ -43,43 +48,76 @@ const FeedbackForm = ({
   const [comment, setComment] = useState<string>("");
   const [currentUser, setCurrentUser] = useState<string>("");
   const [date] = useState<Dayjs>(dayjs());
-
-  const {getFeedbackById, feedback} = useFetchFeedbacks()
-  const {getUserById, user} = useFetchUsers()
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await getUserById()
-      await getFeedbackById()
-    }
-    fetchData()
-
-  }, [getUserById, getFeedbackById])
+  const { insertFeedback } = useInsertFeedback();
+  const { updateFeedback } = useUpdateFeedback();
+  const { data: userResponse } = useFetchUserById(userId!);
+  const { data: feedbackResponse } = useFetchFeedbackDetails(feedbackId!);
+  const id = useId();
 
   useEffect(() => {
-    if(user) {
-      setCurrentUser(user[0].name)
+    if (userId && userRole) {
+      try {
+        if (userResponse) {
+          setCurrentUser(userResponse.name);
+        }
+      } catch (err) {
+        console.error("Erro ao buscar usuário:", err);
+      }
     }
+    return;
+  }, [userResponse, label, userId, userRole]);
 
-    if(feedback) {
-      setRating(feedback[0].rating)
-      setPositivePoint(feedback[0].positivePoint)
-      setNegativePoint(feedback[0].negativePoint)
-      setCategory(feedback[0].category)
-      setComment(feedback[0].comment)
-      setRevieweeAvatar(feedback[0].revieweeAvatar)
-      setRevieweeId(feedback[0].revieweeId)
+  useEffect(() => {
+    if (label == "dashboard" && userId && userRole) {
+      try {
+        if (feedbackResponse.length > 0) {
+          setRating(feedbackResponse[0].rating);
+          setPositivePoint(feedbackResponse[0].positivePoint);
+          setNegativePoint(feedbackResponse[0].negativePoint);
+          setCategory(feedbackResponse[0].category);
+          setComment(feedbackResponse[0].comment);
+          setRevieweeName(feedbackResponse[0].revieweeName);
+          setRevieweeId(feedbackResponse[0].revieweeId);
+          setRevieweeAvatar(feedbackResponse[0].revieweeAvatar);
+        }
+      } catch (err) {
+        console.error("Erro ao buscar feedback:", err);
+      }
     }
-  }, [user, feedback, revieweeAvatar, setRevieweeAvatar, setRevieweeId])
+  }, [
+    feedbackResponse,
+    setRevieweeName,
+    setRevieweeId,
+    setRevieweeAvatar,
+    label,
+    userId,
+    userRole,
+  ]);
 
   const handleSubmit = () => {
+    if (rating === null) {
+      console.error("Rating is required.");
+      return;
+    }
+
+    if (!revieweeId || !revieweeName) {
+      console.error("Reviewee information is missing.");
+      return;
+    }
+
+    if (!userId || !userRole || !currentUser) {
+      console.error("Reviewer information is missing.");
+      return;
+    }
+
     const feedback = {
+      id,
       rating,
       positivePoint,
       negativePoint,
       category,
       comment,
-      date,
+      date: date.format("DD/MM/YYYY"),
       reviewerId: userId,
       revieweeId,
       reviewerName: currentUser,
@@ -89,27 +127,28 @@ const FeedbackForm = ({
       revieweeAvatar,
     };
 
-  //   if (label === "feedback") {
-  //     axios
-  //       .post(baseURL + "/feedbacks", feedback)
-  //       .then(() => {
-  //         setRevieweeName("")
-  //         navigate("/allfeedbacks/" + userId);
-  //       })
-  //       .catch((err) => console.log(err));
-  //   }
+    if (label === "feedback") {
+      insertFeedback(feedback).then((success) => {
+        if (success) {
+          if (userRole === "employer") {
+            navigate(`/allfeedbacks/${userId}`);
+          } else {
+            navigate(`/dashboard/${userId}`);
+          }
+        } else {
+          console.error("Failed to submit feedback");
+        }
+      });
+    }
 
-  //   if (label === "dashboard") {
-  //     axios
-  //       .put(baseURL + "/feedbacks/" + feedbackId, feedback)
-  //       .then((response) => {
-  //         const updatedFeedback: IFeedback = response.data[0];
-  //         setRevieweeName("")
-  //         onClose(updatedFeedback);
-  //       })
-  //       .catch((err) => console.log(err))
-  //   }
-  }
+    if (label === "dashboard") {
+      updateFeedback(feedbackId ?? "", feedback).then(() => {
+        if (onClose && feedbackId) {
+          onClose(feedback);
+        }
+      });
+    }
+  };
 
   const verifyForm = () => {
     if (userRole === "company") {
@@ -278,58 +317,57 @@ const FeedbackForm = ({
 
 export default FeedbackForm;
 
-
 // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     try {
-  //       const endpoint = userRole === "employer" ? "/employers" : "/companies";
-  //       const response = await axios.get(`${baseURL}${endpoint}?id=${userId}`);
+//   const fetchUser = async () => {
+//     try {
+//       const endpoint = userRole === "employer" ? "/employers" : "/companies";
+//       const response = await axios.get(`${baseURL}${endpoint}?id=${userId}`);
 
-  //       const name = response.data[0]?.name;
+//       const name = response.data[0]?.name;
 
-  //       if (name) {
-  //         setCurrentUser(name);
-  //       } else {
-  //         console.warn("Usuário não encontrado.");
-  //       }
-  //     } catch (err) {
-  //       console.error("Erro ao buscar usuário:", err);
-  //     }
-  //   };
+//       if (name) {
+//         setCurrentUser(name);
+//       } else {
+//         console.warn("Usuário não encontrado.");
+//       }
+//     } catch (err) {
+//       console.error("Erro ao buscar usuário:", err);
+//     }
+//   };
 
-  //   const fetchFeedback = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `${baseURL}/feedbacks?id=${feedbackId}`
-  //       );
+//   const fetchFeedback = async () => {
+//     try {
+//       const response = await axios.get(
+//         `${baseURL}/feedbacks?id=${feedbackId}`
+//       );
 
-  //       setRating(response.data[0].rating);
-  //       setPositivePoint(response.data[0].positivePoint);
-  //       setNegativePoint(response.data[0].negativePoint);
-  //       setCategory(response.data[0].category);
-  //       setComment(response.data[0].comment);
-  //       setDate(dayjs(response.data[0].date));
-  //       setRevieweeName(response.data[0].revieweeName);
-  //       setRevieweeId(response.data[0].revieweeId);
-  //       setRevieweeAvatar(response.data[0].revieweeAvatar);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
+//       setRating(response.data[0].rating);
+//       setPositivePoint(response.data[0].positivePoint);
+//       setNegativePoint(response.data[0].negativePoint);
+//       setCategory(response.data[0].category);
+//       setComment(response.data[0].comment);
+//       setDate(dayjs(response.data[0].date));
+//       setRevieweeName(response.data[0].revieweeName);
+//       setRevieweeId(response.data[0].revieweeId);
+//       setRevieweeAvatar(response.data[0].revieweeAvatar);
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   };
 
-  //   if (userId && userRole) {
-  //     fetchUser();
-  //   }
+//   if (userId && userRole) {
+//     fetchUser();
+//   }
 
-  //   if (userId && userRole && label === "dashboard") {
-  //     fetchFeedback();
-  //   }
-  // }, [
-  //   userId,
-  //   userRole,
-  //   label,
-  //   feedbackId,
-  //   setRevieweeName,
-  //   setRevieweeId,
-  //   setRevieweeAvatar,
-  // ]);
+//   if (userId && userRole && label === "dashboard") {
+//     fetchFeedback();
+//   }
+// }, [
+//   userId,
+//   userRole,
+//   label,
+//   feedbackId,
+//   setRevieweeName,
+//   setRevieweeId,
+//   setRevieweeAvatar,
+// ]);

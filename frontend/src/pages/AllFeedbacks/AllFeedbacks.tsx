@@ -4,7 +4,8 @@ import type { IFeedback } from "../../interfaces/IFeedback";
 import { useNavigate, useParams } from "react-router-dom";
 import FeedbackSimpleCard from "../../components/Card/Feedback/FeedbackSimpleCard";
 import { UserContext } from "../../context/User/UserContext";
-import { useFetchFeedbacks } from "../../hooks/useFetchFeedbacks";
+import { useFetchFeedbacks } from "../../hooks/Actions/Get/Feedbacks/useFetchFeedbacks";
+import LoadingScreen from "../../components/Loading/LoadingScreen";
 
 const AllFeedbacks = () => {
   const navigate = useNavigate();
@@ -20,13 +21,7 @@ const AllFeedbacks = () => {
 
 
   if (loading) {
-    return (
-      <Box sx={{ padding: 2 }}>
-        <Typography variant="h4" align="center">
-          Carregando...
-        </Typography>
-      </Box>
-    );
+    <LoadingScreen />;
   }
 
   if (error) {
